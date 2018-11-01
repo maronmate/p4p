@@ -1,0 +1,537 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PfourPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DeathLine">
+          <Key>
+            <PropertyRef Name="YM" />
+          </Key>
+          <Property Name="YM" Type="date" Nullable="false" />
+          <Property Name="DeathLineDate" Type="date" />
+          <Property Name="ModifyUserId" Type="int" />
+          <Property Name="ModifyDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReportOrder" Type="int" Nullable="false" />
+          <Property Name="ShowInReport" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoginUser">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Point">
+          <Key>
+            <PropertyRef Name="YM" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="YM" Type="date" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="MonthlyPoint" Type="float" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="350" />
+          <Property Name="ModifyDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionId" />
+          </Key>
+          <Property Name="PositionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="TargetPoint" Type="float" />
+        </EntityType>
+        <EntityType Name="Subdivision">
+          <Key>
+            <PropertyRef Name="SubdivisionId" />
+          </Key>
+          <Property Name="SubdivisionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="OrderInDepartment" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Lastname" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Birthdate" Type="date" />
+          <Property Name="PositionId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="SubdivisionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserLoginDepartment">
+          <Key>
+            <PropertyRef Name="UserLoginDepartmentId" />
+          </Key>
+          <Property Name="UserLoginDepartmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserLoginId" Type="int" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Point_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Point" Type="Self.Point" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Point">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Position_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Position">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subdivision_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Subdivision" Type="Self.Subdivision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Subdivision">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Position">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Subdivision">
+          <End Role="Subdivision" Type="Self.Subdivision" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subdivision">
+              <PropertyRef Name="SubdivisionId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="SubdivisionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLoginDepartment_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="UserLoginDepartment" Type="Self.UserLoginDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="UserLoginDepartment">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLoginDepartment_LoginUser">
+          <End Role="LoginUser" Type="Self.LoginUser" Multiplicity="1" />
+          <End Role="UserLoginDepartment" Type="Self.UserLoginDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUser">
+              <PropertyRef Name="LoginId" />
+            </Principal>
+            <Dependent Role="UserLoginDepartment">
+              <PropertyRef Name="UserLoginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PfourPModelStoreContainer">
+          <EntitySet Name="DeathLine" EntityType="Self.DeathLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginUser" EntityType="Self.LoginUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Point" EntityType="Self.Point" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subdivision" EntityType="Self.Subdivision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLoginDepartment" EntityType="Self.UserLoginDepartment" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Point_User" Association="Self.FK_Point_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Point" EntitySet="Point" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Position_Department" Association="Self.FK_Position_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Position" EntitySet="Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subdivision_Department" Association="Self.FK_Subdivision_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Subdivision" EntitySet="Subdivision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Position" Association="Self.FK_User_Position">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Subdivision" Association="Self.FK_User_Subdivision">
+            <End Role="Subdivision" EntitySet="Subdivision" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLoginDepartment_Department" Association="Self.FK_UserLoginDepartment_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="UserLoginDepartment" EntitySet="UserLoginDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLoginDepartment_LoginUser" Association="Self.FK_UserLoginDepartment_LoginUser">
+            <End Role="LoginUser" EntitySet="LoginUser" />
+            <End Role="UserLoginDepartment" EntitySet="UserLoginDepartment" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PfourPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReportOrder" Type="Int32" Nullable="false" />
+          <Property Name="ShowInReport" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Positions" Relationship="Self.FK_Position_Department" FromRole="Department" ToRole="Position" />
+          <NavigationProperty Name="Subdivisions" Relationship="PfourPModel.FK_Subdivision_Department" FromRole="Department" ToRole="Subdivision" />
+          <NavigationProperty Name="UserLoginDepartments" Relationship="PfourPModel.FK_UserLoginDepartment_Department" FromRole="Department" ToRole="UserLoginDepartment" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionId" />
+          </Key>
+          <Property Name="PositionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Position_Department" FromRole="Position" ToRole="Department" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_Position" FromRole="Position" ToRole="User" />
+          <Property Name="TargetPoint" Type="Double" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lastname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Birthdate" Type="DateTime" Precision="0" />
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Position" Relationship="Self.FK_User_Position" FromRole="User" ToRole="Position" />
+          <NavigationProperty Name="Points" Relationship="PfourPModel.FK_Point_User" FromRole="User" ToRole="Point" />
+          <Property Name="SubdivisionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Subdivision" Relationship="PfourPModel.FK_User_Subdivision" FromRole="User" ToRole="Subdivision" />
+        </EntityType>
+        <Association Name="FK_Position_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Position">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Position">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PfourPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Positions" EntityType="Self.Position" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Position_Department" Association="Self.FK_Position_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Position" EntitySet="Positions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Position" Association="Self.FK_User_Position">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="DeathLines" EntityType="PfourPModel.DeathLine" />
+          <EntitySet Name="Points" EntityType="PfourPModel.Point" />
+          <AssociationSet Name="FK_Point_User" Association="PfourPModel.FK_Point_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Point" EntitySet="Points" />
+          </AssociationSet>
+          <EntitySet Name="Subdivisions" EntityType="PfourPModel.Subdivision" />
+          <AssociationSet Name="FK_Subdivision_Department" Association="PfourPModel.FK_Subdivision_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Subdivision" EntitySet="Subdivisions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Subdivision" Association="PfourPModel.FK_User_Subdivision">
+            <End Role="Subdivision" EntitySet="Subdivisions" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="LoginUsers" EntityType="PfourPModel.LoginUser" />
+          <EntitySet Name="UserLoginDepartments" EntityType="PfourPModel.UserLoginDepartment" />
+          <AssociationSet Name="FK_UserLoginDepartment_Department" Association="PfourPModel.FK_UserLoginDepartment_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="UserLoginDepartment" EntitySet="UserLoginDepartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLoginDepartment_LoginUser" Association="PfourPModel.FK_UserLoginDepartment_LoginUser">
+            <End Role="LoginUser" EntitySet="LoginUsers" />
+            <End Role="UserLoginDepartment" EntitySet="UserLoginDepartments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="DeathLine">
+          <Key>
+            <PropertyRef Name="YM" />
+          </Key>
+          <Property Name="YM" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DeathLineDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifyUserId" Type="Int32" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Point">
+          <Key>
+            <PropertyRef Name="YM" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="YM" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="MonthlyPoint" Type="Double" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="PfourPModel.FK_Point_User" FromRole="Point" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Point_User">
+          <End Type="PfourPModel.User" Role="User" Multiplicity="1" />
+          <End Type="PfourPModel.Point" Role="Point" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Point">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Subdivision">
+          <Key>
+            <PropertyRef Name="SubdivisionId" />
+          </Key>
+          <Property Name="SubdivisionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="PfourPModel.FK_Subdivision_Department" FromRole="Subdivision" ToRole="Department" />
+          <NavigationProperty Name="Users" Relationship="PfourPModel.FK_User_Subdivision" FromRole="Subdivision" ToRole="User" />
+          <Property Name="OrderInDepartment" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_Subdivision_Department">
+          <End Type="PfourPModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="PfourPModel.Subdivision" Role="Subdivision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Subdivision">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Subdivision">
+          <End Type="PfourPModel.Subdivision" Role="Subdivision" Multiplicity="1" />
+          <End Type="PfourPModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subdivision">
+              <PropertyRef Name="SubdivisionId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="SubdivisionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="LoginUser">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserLoginDepartments" Relationship="PfourPModel.FK_UserLoginDepartment_LoginUser" FromRole="LoginUser" ToRole="UserLoginDepartment" />
+        </EntityType>
+        <EntityType Name="UserLoginDepartment">
+          <Key>
+            <PropertyRef Name="UserLoginDepartmentId" />
+          </Key>
+          <Property Name="UserLoginDepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserLoginId" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="PfourPModel.FK_UserLoginDepartment_Department" FromRole="UserLoginDepartment" ToRole="Department" />
+          <NavigationProperty Name="LoginUser" Relationship="PfourPModel.FK_UserLoginDepartment_LoginUser" FromRole="UserLoginDepartment" ToRole="LoginUser" />
+        </EntityType>
+        <Association Name="FK_UserLoginDepartment_Department">
+          <End Type="PfourPModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="PfourPModel.UserLoginDepartment" Role="UserLoginDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="UserLoginDepartment">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLoginDepartment_LoginUser">
+          <End Type="PfourPModel.LoginUser" Role="LoginUser" Multiplicity="1" />
+          <End Type="PfourPModel.UserLoginDepartment" Role="UserLoginDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoginUser">
+              <PropertyRef Name="LoginId" />
+            </Principal>
+            <Dependent Role="UserLoginDepartment">
+              <PropertyRef Name="UserLoginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PfourPModelStoreContainer" CdmEntityContainer="PfourPEntities">
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="PfourPModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ReportOrder" ColumnName="ReportOrder" />
+                <ScalarProperty Name="ShowInReport" ColumnName="ShowInReport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="PfourPModel.Position">
+              <MappingFragment StoreEntitySet="Position">
+                <ScalarProperty Name="TargetPoint" ColumnName="TargetPoint" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="PfourPModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="SubdivisionId" ColumnName="SubdivisionId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Lastname" ColumnName="Lastname" />
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeathLines">
+            <EntityTypeMapping TypeName="PfourPModel.DeathLine">
+              <MappingFragment StoreEntitySet="DeathLine">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="DeathLineDate" ColumnName="DeathLineDate" />
+                <ScalarProperty Name="YM" ColumnName="YM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Points">
+            <EntityTypeMapping TypeName="PfourPModel.Point">
+              <MappingFragment StoreEntitySet="Point">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="MonthlyPoint" ColumnName="MonthlyPoint" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="YM" ColumnName="YM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subdivisions">
+            <EntityTypeMapping TypeName="PfourPModel.Subdivision">
+              <MappingFragment StoreEntitySet="Subdivision">
+                <ScalarProperty Name="OrderInDepartment" ColumnName="OrderInDepartment" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SubdivisionId" ColumnName="SubdivisionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginUsers">
+            <EntityTypeMapping TypeName="PfourPModel.LoginUser">
+              <MappingFragment StoreEntitySet="LoginUser">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLoginDepartments">
+            <EntityTypeMapping TypeName="PfourPModel.UserLoginDepartment">
+              <MappingFragment StoreEntitySet="UserLoginDepartment">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="UserLoginId" ColumnName="UserLoginId" />
+                <ScalarProperty Name="UserLoginDepartmentId" ColumnName="UserLoginDepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
