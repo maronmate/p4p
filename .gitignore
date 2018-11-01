@@ -4,3 +4,7 @@
 
 *.config
 *.suo
+/api/P4Papi/P4Papi/bin
+/api/P4Papi/P4Papi/obj/Debug
+/api/P4Papi/packages
+/api/P4Papi/P4Papi/Web.config
