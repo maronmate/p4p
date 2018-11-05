@@ -87,7 +87,7 @@ export default {
     .login-card
     {
         position: absolute;
-        width: 400px;
+        width: 420px;
         top: 40%;
         left: 50%;
         margin-right: -50%;
@@ -102,4 +102,5 @@ export default {
     button:hover {
         background-color: #dddddd !important
     }
+
 </style>

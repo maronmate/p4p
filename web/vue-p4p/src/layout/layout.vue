@@ -11,7 +11,7 @@
                         <template slot="button-content">
                             <a>Administrator</a>
                         </template>
-                    <b-dropdown-item href="#"><router-link to="/admin/deathline">Death line</router-link></b-dropdown-item>
+                    <b-dropdown-item href="#"><router-link to="/admin/deathline">จัดการ Death line</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managetype">จัดการบุคคล</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managepriority">จัดการแผนก</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managepriority">จัดการหน่วยงาน</router-link></b-dropdown-item>
@@ -32,6 +32,18 @@
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
+             <div class="titel-block" v-if="showTitle">
+                 <b-container fluid >
+                    <b-row align-h="start" align-v="center">
+                        <b-col>
+                            <div class="titel-text">{{titleText}}</div> 
+                            <div class="description-text" v-if="showDescription"> {{descriptionText}}</div> 
+                        </b-col>
+                    </b-row>
+                 </b-container>
+                
+        </div>
+        <div class="empty-block backgroundp4p"></div>
         <slot></slot>
     </div>    
 </template>
@@ -48,9 +60,40 @@ nav a.router-link-exact-active {
 }
 .bg-info
 {
-    background-color: #eeeeee !important;
+    background-color: #dddddd !important;
     height: 60px;
 }
+    .titel-block
+    {
+        background-color: #dddddd;
+         height: 60px;
+         color: #4e4e4ebd;
+         
+    }
+    .titel-text
+    {
+       color: #4e4e4ebd;
+       font-size: xx-large; 
+       text-align: left;
+       margin-left: 30px;
+       float: left;
+    }
+    .description-text
+    {
+        color: #5f5f5f5f;
+        font-size: large; 
+        text-align: left;
+        float: left;
+        margin-left: 20px;
+        margin-top: 13px;
+         
+    }
+    .vertical-center {
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }   
 ul li a {
     color: #4e4e4ebd !important;
   }
@@ -66,20 +109,29 @@ ul li a {
     color: #555555 !important;
     margin-left: 30px;
 }
+
 </style>
 
 <script>
 import { mapGetters } from "vuex";
 
+
 export default {
   data: () => ({
     title: "Nav template"
   }),
+  props: ["showTitle","titleText","showDescription","descriptionText"]
+  ,
+    mounted()
+    {
+
+    },
   methods: {
     logOut: function() {
         this.$store.dispatch("loginModule/logout");
         this.$router.push({ path: "/login" });
-    }
+    },
+
   },
   computed: {
     ...mapGetters({

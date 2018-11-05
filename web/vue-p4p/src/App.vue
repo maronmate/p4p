@@ -42,6 +42,35 @@ html
    border-style: none !important;
    
 }
+.button-ok
+{
+   background-color:#aaaaaa !important;
+   color: #ffffff !important;
+   border-style: none !important;
+   
+   
+}
+.button-cancel
+{
+   background-color:#bbbbbb !important;
+   color: #ffffff !important;
+   border-style: none !important;
+   
+}
+.detail-block
+{
+    background-color: #ffffff;  
+    border-radius: 10px;
+}
+ .background-table
+    {
+         background-color: #ffffff;  
+          border-radius: 10px;
+    }
+.empty-block
+{
+  height: 10px;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -27,10 +27,10 @@ namespace P4Papi.Repository
                 string name = string.Empty;
                 if (deathLine.ModifyUserId.HasValue)
                 {
-                    UserModel user = Repository.RepositoryFactory.UserRepository.GetUserData(deathLine.ModifyUserId.Value);
-                    if (user != null)
+                    LoginModel login = Repository.RepositoryFactory.LoginUserRepository.GetUserLoginData(deathLine.ModifyUserId.Value);
+                    if (login != null)
                     {
-                        name = user.Name;
+                        name = login.Name;
                     }
                 }
                 DeathLineListModel deathLines = new DeathLineListModel(deathLine, name);

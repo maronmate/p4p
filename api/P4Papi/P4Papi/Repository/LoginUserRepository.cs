@@ -21,7 +21,7 @@ namespace P4Papi.Repository
             {
                 return null;
             }
-            LoginModel userModel = null;
+            LoginModel loginModel = null;
 
             var output = _ctx.LoginUsers
                 .Where(user => user.Username == userName && user.Password == password)
@@ -29,10 +29,24 @@ namespace P4Papi.Repository
             if (output.Count() > 0)
             {
                 LoginUser login = output.First();
-                userModel = new LoginModel(login);
+                loginModel = new LoginModel(login);
             }
 
-            return userModel;
+            return loginModel;
+        }
+        public LoginModel GetUserLoginData(int userId)
+        {
+            LoginModel loginModel = null;
+            var output = _ctx.LoginUsers
+                .Where(login => login.LoginId == userId)
+                .Include(t => t.UserLoginDepartments);
+            if (output.Count() > 0)
+            {
+                LoginUser login = output.First();
+                loginModel = new LoginModel(login);
+            }
+
+            return loginModel;
         }
         //public string EncryptString(string Message)
         //{

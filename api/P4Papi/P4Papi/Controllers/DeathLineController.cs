@@ -16,7 +16,7 @@ namespace P4Papi.Controllers
     public class DeathLineController : ApiController
     {
         // GET api/DeathLine/GetDeathLineList?numberOfRow=0
-        public List<DeathLineListModel> GetDeathLineList(int userId, int numberOfRow)
+        public List<DeathLineListModel> GetDeathLineList(int numberOfRow)
         {
             List<DeathLineListModel> result = RepositoryFactory.DeathLineRepository.GetDeathLineList( numberOfRow);
             return result;
