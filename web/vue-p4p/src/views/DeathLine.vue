@@ -4,6 +4,7 @@
             <b-container >
             <div class = "detail-block" v-show="showEdit">
                <div class="form-group">
+            
             <b-row align-v="center" align-h="start" >
                 <b-col cols="1">
                 </b-col>
@@ -40,20 +41,21 @@
                 </b-col>
               
             </b-row>
-            <b-row>
-                <div class="col col-md-6">
+             <b-row  align-h="center" class="mt-3">
+                <b-col cols="8">
                         <b-alert variant="danger"
                             dismissible
                             :show="showSaveAlert"
                             @dismissed="CloseAlert">
                             {{saveResultMsg}}
                         </b-alert>
-                        </div>
+                    </b-col>
             </b-row>
-             <b-row align-v="center" align-h="center" class="mt-2 mb-3">
+             <b-row align-v="center" align-h="center" class="mb-3">
                 <b-button class="button-ok m-1" v-on:click="SaveDeathLine">บันทึก</b-button>
                 <b-button class="button-cancel m-1" v-on:click="ClosedDeathLine">ยกเลิก</b-button>
             </b-row>
+           
             </div>
             </div>
 
