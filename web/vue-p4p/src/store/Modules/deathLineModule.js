@@ -55,7 +55,7 @@ const actions = {
     async requestAddDeathLine({state,commit,dispatch,rootGetters},newDeathLine )
     {
         let hearderToken = rootGetters["loginModule/header"]
-        let result = await deathLineService.AddNewDeathLine(newDeathLine.yM,newDeathLine.deathLineDate,newDeathLine.loginId,hearderToken);
+        let result = await deathLineService.AddNewDeathLine(newDeathLine.yM,newDeathLine.deathLineDate,newDeathLine.loginId,hearderToken);   
         await dispatch('setApiResult',result)
     },
     async requestUpdateDeathLine({state,commit,dispatch,rootGetters},updateDeathLine)
@@ -74,18 +74,23 @@ const actions = {
     {
         if(result.status == 201 || result.status == 200)
         {
-
-            await dispatch('loadDeathLineList')
-            await dispatch('showEditForm',false )
-            await dispatch('showErrorMessage',{show:false,message:""})
+            if(result.data.Result !="OK")
+            {
+                await dispatch('showErrorMessage',{show:true,message:result.data.ResultDescription})
+            }
+            else
+            {
+                await dispatch('loadDeathLineList')
+                await dispatch('showEditForm',false )
+                await dispatch('showErrorMessage',{show:false,message:""})
+            }            
         }
         else
         {
-            console.log(result.status)
             let errorMsg={show:true,
             message:"api error : "+result.status+" : "+result.statusText}
 
-            await dispatch('showErrorMessage',errorMsg)
+            await dispatch('showErrorMessage',{show:true,message:errorMsg})
         }
     },
     initYearMonth({ state, commit })

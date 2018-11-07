@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue'
 import Forbidden from '@/views/Forbidden'
 import Login from '@/views/Login'
 import DeathLine from '@/views/DeathLine'
+import ManageDepartment from '@/views/ManageDepartment'
 import store from '@/store/index'
 
 Vue.use(Router)
@@ -43,6 +44,12 @@ export default new Router({
       path:'/admin/deathline',
       name: 'deathline',
       component: DeathLine,
+      beforeEnter: authMiddleware
+    },
+    {
+      path:'/admin/managedepartment',
+      name: 'manageDepartment',
+      component: ManageDepartment,
       beforeEnter: authMiddleware
     }
   ]

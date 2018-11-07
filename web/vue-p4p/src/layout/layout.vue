@@ -13,7 +13,7 @@
                         </template>
                     <b-dropdown-item href="#"><router-link to="/admin/deathline">จัดการ Death line</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managetype">จัดการบุคคล</router-link></b-dropdown-item>
-                    <b-dropdown-item href="#"><router-link to="/admin/managepriority">จัดการแผนก</router-link></b-dropdown-item>
+                    <b-dropdown-item href="#"><router-link to="/admin/managedepartment">จัดการแผนก</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managepriority">จัดการหน่วยงาน</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managepriority">จัดการตำแหน่ง</router-link></b-dropdown-item>
                 </b-nav-item-dropdown>
