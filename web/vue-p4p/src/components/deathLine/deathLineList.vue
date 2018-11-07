@@ -69,7 +69,7 @@ export default {
             {
                 let YM = new Date(this.RemoveItem.YM);
                 let stringYM =  YM.getFullYear() +'-'+(YM.getMonth()+1).toString().padStart(2, '0')
-                return "Do you sure to Remove DeathLine "+stringYM+" ?";
+                return "ต้องการลบ DeathLine งวดปี-เดือน '"+ stringYM +"' หรือไม่?";
             }
             else
                 return "";

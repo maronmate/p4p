@@ -1,8 +1,7 @@
 <template>
     <nav-layout showTitle=true titleText="จัดการแผนก" showDescription=true descriptionText="สร้างแผนกเพื่อนำไปใช้ในส่วนอื่นของโปรแกรม">
         <div class="backgroundp4p">         
-        <div class="container">
-        
+        <div class="container">     
                 <div class = "detail-block" v-show="showEdit">
                     <div class="form-group">
                           <b-row align-v="center" align-h="start" class="mb-4" >
@@ -55,10 +54,14 @@
                         </b-row>                        
                     </div>
                </div>
-                <div class="row col col-md-2 col-md-push-10 float-right">
-                    <b-button variant="success" class="button-ok ml-2 mb-2 mt-2 btn-sm" v-show="!showEdit" v-on:click="AddDepartment">เพิ่มแผนก</b-button>
-                </div>
+                
+                    
                 <div class="background-table">
+                    <b-row  align-h="end" align-v="center" >
+                        <b-col cols="1" >
+                            <b-button variant="success" class="button-ok mb-2 mt-2 btn-sm" v-show="!showEdit" v-on:click="AddDepartment">เพิ่มแผนก</b-button>
+                         </b-col>
+                    </b-row>
                     <b-table striped hover :items="departmentList" :fields="TableHeader">  
                         <template slot="ShowInReport" slot-scope="data">
                             <span class="text-yes" v-if="data.value">Yes</span>
