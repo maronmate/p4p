@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import loginModule from '@/store/Modules/loginModule'
 import deathLineModule from '@/store/Modules/deathLineModule'
 import departmentModule from '@/store/Modules/departmentModule'
+import positionModule from '@/store/Modules/positionModule'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -11,5 +12,6 @@ export default new Vuex.Store({
     loginModule,
     deathLineModule,
     departmentModule,
+    positionModule,
   }
 })

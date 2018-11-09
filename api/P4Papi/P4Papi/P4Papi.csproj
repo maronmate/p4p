@@ -175,6 +175,7 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DisplayModels\DeathLineListModel.cs" />
+    <Compile Include="Models\DisplayModels\DepartmentDDLModel.cs" />
     <Compile Include="Models\DisplayModels\DepartmentListModel.cs" />
     <Compile Include="Models\DisplayModels\PointByUserModel.cs" />
     <Compile Include="Models\DisplayModels\PositionListModel.cs" />

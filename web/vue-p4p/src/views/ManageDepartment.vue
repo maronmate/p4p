@@ -90,7 +90,7 @@
     import { mapGetters } from 'vuex'
 
     export default {
-    name: 'DeathLine',
+    name: 'ManageDepartment',
     data() {
         return {
             IsNew : true,
@@ -141,7 +141,6 @@
         },
         EditDepartment(department)
         {
-            console.log(department)
             this.DepartmentId = department.DepartmentId
             this.DepartmentName = department.DepartmentName
             this.OrderInReport=department.OrderInReport
@@ -183,7 +182,6 @@
         {
              if(this.RemoveItem)
              {
-                 console.log(this.RemoveItem.DepartmentId)
                 this.$store.dispatch('departmentModule/requestDeleteDepartment',{departmentId:this.RemoveItem.DepartmentId});
              }
         },
@@ -198,7 +196,7 @@
                 }
                 if(this.OrderInReport < 0 )
                 {
-                   this.SetResultMsg(true,'ลำดับแผนกในรายงาน ต้องมีค่ามากกว่าหรือเท่ากับ0') 
+                   this.SetResultMsg(true,'ลำดับแผนกในรายงาน ต้องมีค่ามากกว่าหรือเท่ากับ 0') 
                    return;
                 }
                 if(this.IsNew)

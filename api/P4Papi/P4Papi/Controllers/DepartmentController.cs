@@ -46,6 +46,21 @@ namespace P4Papi.Controllers
                 return null;
             }
         }
+        // GET api/Department/GetDepartmentDDL
+        [HttpGet]
+        [Route("GetDepartmentDDL")]
+        public List<DepartmentDDLModel> GetDepartmentDDL()
+        {
+            List<DepartmentDDLModel> departmentModels = new List<DepartmentDDLModel>();
+            List<Department> departments = RepositoryFactory.DepartmentRepository.GetAllDepartmentOrderByName();
+            foreach (Department department in departments)
+            {
+                DepartmentDDLModel departmentDDLModel = new DepartmentDDLModel(department);
+                departmentModels.Add(departmentDDLModel);
+            }
+            return departmentModels;
+        }
+
 
         // POST api/Department/InsertDepartment
         [HttpPost]

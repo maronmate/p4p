@@ -1,20 +1,23 @@
+import positionService from '@/api/positionService'
 import departmentService from '@/api/departmentService'
 
 const type = {
-    loadDepartmentList:'LOAD_DEPARTMENT',
+    loadPositionList:'LOAD_POSITION',
+    loadDdlDepartment:'LOAD_DDL_DEPARTMENT',
     showEdit: 'SHOW_EDIT_FROM',
     saveResultMsg: 'SET_ERROR_MESSAGE',
     showResultMsg: 'SHOW_ERROR_MESSAGE',
 }
 const state = {
-    departmentList:[],
+    positionList:[],
     showEditAddForm : false,
     saveResultMsg : null,
     showResultMsg : false,
+    ddlDepartment :[]
 }
 const getters = {
-    departmentList(state, getters) {
-        return state.departmentList;
+    positionList(state, getters) {
+        return state.positionList;
     },
     showEdit(state, getters) {
         return state.showEditAddForm;
@@ -25,38 +28,47 @@ const getters = {
     showSaveAlert(state, getters) {
         return state.showResultMsg;
     },
+    ddlDepartment(state, getters) {
+        return state.ddlDepartment;
+    },
 }
 const actions = {
-    async loadDepartmentList({ state, commit,rootGetters }) {
-        let hearderToken = rootGetters["loginModule/header"]
-        let departments = await departmentService.GetAllDepartment(hearderToken);
-        commit(type.loadDepartmentList,departments.data)
-        },
+
     async showEditForm({state, commit}, show)
-        {
-             commit(type.showEdit,show )
-        },
+    {
+         commit(type.showEdit,show )
+    },
     async showErrorMessage({state, commit}, error)
-        {
-             commit(type.showResultMsg,error.show )
-             commit(type.saveResultMsg,error.message )
+    {
+         commit(type.showResultMsg,error.show )
+         commit(type.saveResultMsg,error.message )
+    },
+    async loadDDLDepartment({ state, commit,rootGetters }) {
+        let hearderToken = rootGetters["loginModule/header"]
+        let departments = await departmentService.GetAllDepartmentDDL(hearderToken);
+        commit(type.loadDdlDepartment,departments)
         },
-    async requestAddDepartment({state,commit,dispatch,rootGetters},newDepartment )
+    async loadPositionList({ state, commit,rootGetters }) {
+            let hearderToken = rootGetters["loginModule/header"]
+            let positions = await positionService.GetAllPosition(hearderToken);
+            commit(type.loadPositionList,positions.data)
+        },
+    async requestAddPosition({state,commit,dispatch,rootGetters},newPosition )
         {
             let hearderToken = rootGetters["loginModule/header"]
-            let result = await departmentService.AddNewDepartment(newDepartment.name,newDepartment.orderInReport,newDepartment.showInReport,hearderToken);   
+            let result = await positionService.AddNewPosition(newPosition.name,newPosition.departmentId,newPosition.targetPoint,hearderToken);   
             await dispatch('setApiResult',result)
         },
-    async requestUpdateDepartment({state,commit,dispatch,rootGetters},updateDepartment)
+    async requestUpdatePosition({state,commit,dispatch,rootGetters},updatePosition)
         {
             let hearderToken = rootGetters["loginModule/header"]
-            let result = await departmentService.UpdateDepartment(updateDepartment.departmentId,updateDepartment.name,updateDepartment.orderInReport,updateDepartment.showInReport,hearderToken);
+            let result = await positionService.UpdatePosition(updatePosition.positionId,updatePosition.name,updatePosition.departmentId,updatePosition.targetPoint,hearderToken);
             await dispatch('setApiResult',result)
         },
-    async requestDeleteDepartment({state,commit,dispatch,rootGetters},deleteDepartment)
+    async requestDeletePosition({state,commit,dispatch,rootGetters},deletePosition)
         {
             let hearderToken = rootGetters["loginModule/header"]
-            let result = await departmentService.DeleteDepartment(deleteDepartment.departmentId,hearderToken)
+            let result = await positionService.DeletePosition(deletePosition.positionId,hearderToken)
             await dispatch('setApiResult',result)
         },
     async setApiResult({state,commit,dispatch},result)
@@ -69,7 +81,7 @@ const actions = {
                 }
                 else
                 {
-                    await dispatch('loadDepartmentList')
+                    await dispatch('loadPositionList')
                     await dispatch('showEditForm',false )
                     await dispatch('showErrorMessage',{show:false,message:""})
                 }            
@@ -84,8 +96,8 @@ const actions = {
         },
 }
 const mutations = {
-    [type.loadDepartmentList](state, departments){
-        state.departmentList = departments;
+    [type.loadPositionList](state, positions){
+        state.positionList = positions;
     },
     [type.showEdit](state, show) {
         state.showEditAddForm = show
@@ -95,6 +107,9 @@ const mutations = {
     },
     [type.showResultMsg](state, show) {
         state.showResultMsg = show
+    },
+    [type.loadDdlDepartment](state, departmentDDL){
+        state.ddlDepartment = departmentDDL;
     },
 }
 export default {
