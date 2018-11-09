@@ -1,18 +1,18 @@
 <template>
-    <nav-layout showTitle=true titleText="จัดการตำแหน่ง" showDescription=true descriptionText="สร้างตำแหน่งเพื่อนำไปใช้ในส่วนอื่นของโปรแกรม">
+       <nav-layout showTitle=true titleText="จัดการหน่วยงาน" showDescription=true descriptionText="สร้างหน่วยงานเพื่อนำไปใช้ในส่วนอื่นของโปรแกรม">
         <div class="backgroundp4p">         
             <div class="container">
-                 <div class = "detail-block" v-show="showEdit">
+                <div class = "detail-block" v-show="showEdit">
                       <div class="form-group">
-                        <b-row align-v="center" align-h="start" class="mb-4" >
+                           <b-row align-v="center" align-h="start" class="mb-4" >
                         </b-row>
                         <b-row align-v="center" align-h="start" class="mb-2" >
                            <b-col cols="3"></b-col>
                             <b-col cols="2" class="text-right">
-                                <div>ชื่อตำแหน่ง :</div>
+                                <div>ชื่อหน่วยงาน :</div>
                             </b-col>
                             <b-col cols="3">
-                                <input v-model="PositionName" class="form-control">
+                                <input v-model="SubdivisionName" class="form-control">
                             </b-col>                          
                         </b-row>
                         <b-row align-v="center" align-h="start" class="mb-2">
@@ -28,10 +28,10 @@
                         <b-row align-v="center" align-h="start" class="mb-2" >
                            <b-col cols="3"></b-col>
                             <b-col cols="2" class="text-right">
-                                <div>แต้มประกัน :</div>
+                                <div>ลำดับในแผนก :</div>
                             </b-col>
                             <b-col cols="3">
-                                <input v-model="TargetPoint" type="number" class="form-control">
+                                <input v-model="OrderInDepartment" type="number" class="form-control">
                             </b-col>                          
                          </b-row>
                          <b-row  align-h="center" class="mt-3">
@@ -45,15 +45,13 @@
                             </b-col>
                         </b-row>
                          <b-row align-v="center" align-h="center" class="mb-2">
-                            <b-button class="button-ok m-1" v-on:click="SavePosition">บันทึก</b-button>
-                            <b-button class="button-cancel m-1" v-on:click="ClosedPosition">ยกเลิก</b-button>
+                            <b-button class="button-ok m-1" v-on:click="SaveSubDivision">บันทึก</b-button>
+                            <b-button class="button-cancel m-1" v-on:click="ClosedSubDivision">ยกเลิก</b-button>
                         </b-row>      
                       </div>
                 </div>
-
                 <div class="background-table">
-                    
-                    <b-row  align-h="end" align-v="center" >
+                     <b-row  align-h="end" align-v="center" >
                         <b-col md="4" class="my-1">
                             <b-form-group horizontal label="Filter" class="mb-0">
                                 <b-input-group>
@@ -67,99 +65,98 @@
                         <b-col cols="6" >
                             </b-col>
                         <b-col cols="2" >
-                            <b-button variant="success" class="button-ok mb-2 mt-2" v-show="!showEdit" v-on:click="AddPosition">เพิ่มตำแหน่ง</b-button>
+                            <b-button variant="success" class="button-ok mb-2 mt-2" v-show="!showEdit" v-on:click="AddSubDivision">เพิ่มตำแหน่ง</b-button>
                          </b-col>
                     </b-row>
-                    <b-table striped hover :items="positionList" :fields="TableHeader" :filter="filter">     
+                    <b-table striped hover :items="subDivisionList" :fields="TableHeader" :filter="filter">     
                         <template slot="action" slot-scope="row">
-                            <b-button v-show="!showEdit" variant="success sm" class="button-ok mr-1" size="sm" @click.stop="EditPosition(row.item)">แก้ไข</b-button>
+                            <b-button v-show="!showEdit" variant="success sm" class="button-ok mr-1" size="sm" @click.stop="EditSubDivision(row.item)">แก้ไข</b-button>
                             <b-button v-show="!showEdit" variant="danger sm" class="button-cancel mr-1" size="sm" @click="ShowCofirmBoxDialog(row.item)" v-b-modal.modalRef >ลบ</b-button>                    
                         </template>
                     </b-table>
                 </div>
             </div>
         </div>
-         <b-modal 
+        <b-modal 
           id="modalRef"
                     ref="modalRef"
                     title="Confirm Remove"                
-                    @ok="DeletePosition">
+                    @ok="DeleteSubDivision">
                     {{this.MsgDelete}}             
             </b-modal>
-    </nav-layout>
+       </nav-layout>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    name: 'ManagePosition',
-      data() {
+    name: 'ManageSubDivision',
+    data() {
         return {
             IsNew : true,
              TableHeader: [ 
-             {key:'PositionId',label:'ID',sortable: true}
-            ,{key: 'PositionName',label:'ชื่อตำแหน่ง',sortable: true}
+             {key:'SubdivisionId',label:'ID',sortable: true}
+            ,{key: 'SubdivisionName',label:'ชื่อหน่วยงาน',sortable: true}
 
             ,{key: 'DepartmentName',label:'ชื่อแผนก',sortable: true}
-            ,{key: 'UserInPositionCount',label:'จำนวนคนในตำแหน่ง',sortable: true}
-            ,{key: 'TargetPoint',label:'แต้มประกัน',sortable: true}
+            ,{key: 'UserInSubdivisionCount',label:'จำนวนคนในหน่วยงาน',sortable: true}
+            ,{key: 'OrderInDepartment',label:'ลำดับในแผนก',sortable: true}
             ,{key: 'action',label:'' }
             ],
             RemoveItem : null,
-            PositionId : null,
-            PositionName : null,
+            SubdivisionId : null,
+            SubdivisionName : null,
             DepartmentId : null,
-            TargetPoint:null,
+            OrderInDepartment:null,
             filter: null,
         }
     },
      mounted() {
-        this.initPosition();
+        this.initSubDivision();
     },
     methods:
     {
-
-        AddPosition()
+        AddSubDivision()
         {
             this.DepartmentId = null;
-            this.PositionName = null;
-            this.PositionId=null;
-            this.TargetPoint=null;
+            this.SubdivisionName = null;
+            this.SubdivisionId=null;
+            this.OrderInDepartment=null;
             this.IsNew = true;                      
             this.ShowEditForm(true);
         },
-        EditPosition(position)
+        EditSubDivision(subdivision)
         {
-            this.DepartmentId = position.DepartmentId;
-            this.PositionName = position.PositionName;
-            this.PositionId=position.PositionId;
-            this.TargetPoint=position.TargetPoint;
+            this.DepartmentId = subdivision.DepartmentId;
+            this.SubdivisionName = subdivision.SubdivisionName;
+            this.SubdivisionId=subdivision.SubdivisionId;
+            this.OrderInDepartment=subdivision.OrderInDepartment;
             this.IsNew = false;                      
             this.ShowEditForm(true);
         },
-        ClosedPosition()
+        ClosedSubDivision()
         {
             this.ShowEditForm(false);
             this.DepartmentId = null;
-            this.PositionName = null;
-            this.PositionId=null;
-            this.TargetPoint=null;   
+            this.SubdivisionName = null;
+            this.SubdivisionId=null;
+            this.OrderInDepartment=null;   
             this.SetResultMsg(false,'');
         },
 
-        SavePosition()
+        SaveSubDivision()
         {
-            if(this.PositionName != null && this.DepartmentId != null)
+            if(this.SubdivisionName != null && this.DepartmentId != null)
             {
 
-                if(this.TargetPoint < 0 )
+                if(this.OrderInDepartment < 0 )
                 {
-                   this.SetResultMsg(true,'แต้มประกัน ต้องมีค่ามากกว่าหรือเท่ากับ 0') 
+                   this.SetResultMsg(true,'ลำดับในแผนก ต้องมีค่ามากกว่าหรือเท่ากับ 0') 
                    return;
                 }
                 if(this.IsNew)
-                        this.AddNewPosition(this.PositionName,this.DepartmentId,this.TargetPoint);
+                        this.AddNewSubDivision(this.SubdivisionName,this.DepartmentId,this.OrderInDepartment);
                     else
-                        this.UpdatePosition(this.PositionId,this.PositionName,this.DepartmentId,this.TargetPoint);
+                        this.UpdateSubDivision(this.SubdivisionId,this.SubdivisionName,this.DepartmentId,this.OrderInDepartment);
             }
             else
             {
@@ -168,79 +165,78 @@ export default {
             }
           
         },
-        AddNewPosition: function(name,departmentId,targetPoint)
+        AddNewSubDivision: function(name,departmentId,orderInDepartment)
         {
-            this.$store.dispatch('positionModule/requestAddPosition',{
+            this.$store.dispatch('subDivisionModule/requestAddSubDivision',{
                     name:name
                     ,departmentId :departmentId  
-                    ,targetPoint :targetPoint               
+                    ,orderInDepartment :orderInDepartment               
             })
             
         },
-        UpdatePosition: function(id,name,departmentId,targetPoint)
+        UpdateSubDivision: function(id,name,departmentId,orderInDepartment)
         {
-               this.$store.dispatch('positionModule/requestUpdatePosition',{
-                    positionId:id
+               this.$store.dispatch('subDivisionModule/requestUpdateSubDivision',{
+                    subdivisionId:id
                     ,name:name
                     ,departmentId :departmentId  
-                    ,targetPoint :targetPoint                
+                    ,orderInDepartment :orderInDepartment                
             })     
         },
-        DeletePosition()
+        DeleteSubDivision()
         {
              if(this.RemoveItem)
              {
-                this.$store.dispatch('positionModule/requestDeletePosition',{positionId:this.RemoveItem.PositionId});
+                this.$store.dispatch('subDivisionModule/requestDeleteSubDivision',{subdivisionId:this.RemoveItem.SubdivisionId});
              }
         },
 
-        initPosition()
+        initSubDivision()
         {
             this.loadDepartmentDDL()
-            this.loadPosition()
+            this.loadSubDivision()
         },
         loadDepartmentDDL()
         {
-            this.$store.dispatch('positionModule/loadDDLDepartment')
+            this.$store.dispatch('subDivisionModule/loadDDLDepartment')
         },
-        loadPosition()
+        loadSubDivision()
         {
-            this.$store.dispatch('positionModule/loadPositionList')
+            this.$store.dispatch('subDivisionModule/loadSubDivisionList')
         },
-        ShowCofirmBoxDialog:function(position)
+        ShowCofirmBoxDialog:function(subdivision)
         {         
-            this.RemoveItem =position;
+            this.RemoveItem =subdivision;
         },
-
         ShowEditForm(show)
         {
-            this.$store.dispatch('positionModule/showEditForm',show)
+            this.$store.dispatch('subDivisionModule/showEditForm',show)
         }, 
         SetResultMsg : function(show,msg)
         {
-            this.$store.dispatch('positionModule/showErrorMessage',{show:show,message:msg})
+            this.$store.dispatch('subDivisionModule/showErrorMessage',{show:show,message:msg})
         },  
         CloseAlert()
         {
             this.SetResultMsg(false,'');
         },
     },
-     computed: 
+    computed: 
     {
         ...mapGetters({
-            positionList:'positionModule/positionList',
-            showEdit: 'positionModule/showEdit',
-            showSaveAlert: 'positionModule/showSaveAlert',
-            saveResultMsg: 'positionModule/saveResultMsg',
+            subDivisionList:'subDivisionModule/subDivisionList',
+            showEdit: 'subDivisionModule/showEdit',
+            showSaveAlert: 'subDivisionModule/showSaveAlert',
+            saveResultMsg: 'subDivisionModule/saveResultMsg',
             headerToken:'loginModule/header',
             loginId:'loginModule/loginId',
-            ddlDepartment:"positionModule/ddlDepartment",
+            ddlDepartment:"subDivisionModule/ddlDepartment",
         }),
          MsgDelete()
         {
             if(this.RemoveItem!=null)
             {
-                return "ต้องการลบตำแหน่ง '"+this.RemoveItem.PositionName+"' หรือไม่?";
+                return "ต้องการลบหน่วยงาน '"+this.RemoveItem.SubdivisionName+"' หรือไม่?";
             }
             else
                 return "";
@@ -251,5 +247,3 @@ export default {
 <style scoped>
 
 </style>
-
-

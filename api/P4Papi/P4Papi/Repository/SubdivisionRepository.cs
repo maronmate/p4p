@@ -16,7 +16,7 @@ namespace P4Papi.Repository
         }
         public List<Subdivision> GetAllSubdivision()
         {
-            List<Subdivision> subdivision = _ctx.Subdivisions.OrderBy(a => a.Name).ToList();
+            List<Subdivision> subdivision = _ctx.Subdivisions.OrderBy(a => a.Department.Name).ThenBy(a => a.OrderInDepartment).ToList();
             return subdivision;
         }
         public Subdivision GetSubdivisionById(int subdivisionId)

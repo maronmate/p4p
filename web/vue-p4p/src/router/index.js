@@ -6,6 +6,7 @@ import Login from '@/views/Login'
 import DeathLine from '@/views/DeathLine'
 import ManageDepartment from '@/views/ManageDepartment'
 import ManagePosition from '@/views/ManagePosition'
+import ManageSubDivision from '@/views/ManageSubDivision'
 import store from '@/store/index'
 
 Vue.use(Router)
@@ -58,7 +59,14 @@ export default new Router({
       name: 'managePosition',
       component: ManagePosition,
       beforeEnter: authMiddleware
+    },
+    {
+      path:'/admin/managesubdivision',
+      name: 'manageSubDivision',
+      component: ManageSubDivision,
+      beforeEnter: authMiddleware
     }
+    
   ]
   
 })
