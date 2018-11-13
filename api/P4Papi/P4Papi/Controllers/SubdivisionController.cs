@@ -43,11 +43,13 @@ namespace P4Papi.Controllers
             }
         }
 
-        // GET api/Subdivision/GetSubdivisionBySubdivisionId?subdivisionId=1
-        public List<SubdivisionListModel> GetSubdivisionBySubdivisionId(int subdivisionId)
+        // GET api/Subdivision/GetSubdivisionByDepartmentId?departmentId=1
+        [Route("GetSubdivisionByDepartmentId/{departmentId}")]
+        [HttpGet]
+        public List<SubdivisionListModel> GetSubdivisionByDepartmentId(int departmentId)
         {
             List<SubdivisionListModel> subdivisionModels = new List<SubdivisionListModel>();
-            List<Subdivision> subdivisions = RepositoryFactory.SubdivisionRepository.GetSubdivisionByDepartmentId(subdivisionId);
+            List<Subdivision> subdivisions = RepositoryFactory.SubdivisionRepository.GetSubdivisionByDepartmentId(departmentId);
             foreach (Subdivision subdivision in subdivisions)
             {
                 SubdivisionListModel positionModel = new SubdivisionListModel(subdivision);

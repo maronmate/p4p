@@ -65,4 +65,28 @@ export default{
              }
         return axios.delete(url,config);
     },
+    async GetPositionDDLbyDepartment(departmentId,hearderToken)
+    {
+        if(departmentId == null)
+        {
+            var ddl = [];
+            ddl.push({value: null,text: 'กรุณาเลือกตำแหน่ง',disabled:true})
+            return ddl;
+        }
+        const url = this.data().apiUrl+'/api/Position/GetPositionByDepartmentId/'+departmentId;
+        const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken
+                }
+             }
+            var ddl = [];
+            ddl.push({value: null,text: 'กรุณาเลือกตำแหน่ง',disabled:true})
+            await axios.get(url,config).then(result =>{
+                result.data.forEach(item => {
+                    ddl.push({value: item.PositionId,text: item.PositionName})
+                });              
+            })        
+            return ddl
+    },
 }

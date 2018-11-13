@@ -64,4 +64,26 @@ export default{
              }
         return axios.delete(url,config);
     },
+    async GetSubdivisionDDLbyDepartment(departmentId,hearderToken)
+    {
+        if(departmentId == null)
+        {
+            return [];
+        }
+        const url = this.data().apiUrl+'/api/Subdivision/GetSubdivisionByDepartmentId/'+departmentId;
+        const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken
+                }
+             }
+            var ddl = [];
+            ddl.push({value: null,text: 'กรุณาเลือกหน่วยงาน',disabled:true})
+            await axios.get(url,config).then(result =>{
+                result.data.forEach(item => {
+                    ddl.push({value: item.SubdivisionId,text: item.SubdivisionName})
+                });              
+            })        
+            return ddl
+    },
 }

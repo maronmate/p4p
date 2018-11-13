@@ -23,6 +23,8 @@ namespace P4Papi.Models
 
         public DateTime? StartDate { get; set; }
 
+        public bool Enabled { get; set; }
+
         public UserModel()
         {
         }
@@ -37,6 +39,7 @@ namespace P4Papi.Models
                 this.PositionId = user.PositionId;
                 this.StartDate = user.StartDate;
                 this.SubdivisionId = user.SubdivisionId;
+                this.Enabled = user.Enabled;
 
                 this.DepartmentId = user.Position.DepartmentId;
                 this.DepartmentName = user.Position.Department.Name;

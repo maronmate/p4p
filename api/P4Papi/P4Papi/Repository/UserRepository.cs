@@ -15,14 +15,14 @@ namespace P4Papi.Repository
             _ctx = new PfourPEntities();
         }
 
-        public UserModel GetUserData(int userId)
+        public UserDisplayModel GetUserData(int userId)
         {
-            UserModel userModel = null;
+            UserDisplayModel userModel = null;
             var output = _ctx.Users.Where(user => user.UserId == userId);
             if (output.Count() > 0)
             {
                 User user = output.First();
-                userModel = new UserModel(user);
+                userModel = new UserDisplayModel(user);
             }
 
             return userModel;
@@ -52,6 +52,16 @@ namespace P4Papi.Repository
             }
             return output.ToList();
         }
+        public List<UserDisplayModel> GetAllUser()
+        {
+            List<User> users = _ctx.Users.OrderBy(a => a.Position.Department.ReportOrder).ThenBy(a => a.Subdivision.OrderInDepartment).ThenBy(a => a.Position.Name).ThenBy(a => a.Name).ToList();
+            List<UserDisplayModel> userModels = new List<UserDisplayModel>();
+            foreach (User user in users)
+            {
+                userModels.Add(new UserDisplayModel(user));
+            }
+            return userModels;
+        }
         private User GetUserById(int userId)
         {
             var output = _ctx.Users.Where(user => user.UserId == userId);
@@ -63,7 +73,7 @@ namespace P4Papi.Repository
             else
                 return null;
         }
-        public bool InsertUser(string name,string lastName,DateTime? birthDate, int positionId,DateTime startdate, int subDivisionId, out string error)
+        public bool InsertUser(string name, string lastName, DateTime? birthDate, int positionId, DateTime startdate, int subDivisionId, bool enabled, out string error)
         {
             try
             {
@@ -75,6 +85,7 @@ namespace P4Papi.Repository
                 newUser.PositionId = positionId;
                 newUser.StartDate = startdate;
                 newUser.SubdivisionId = subDivisionId;
+                newUser.Enabled = enabled;
 
                 _ctx.Users.Add(newUser);
                 _ctx.SaveChanges();
@@ -86,8 +97,16 @@ namespace P4Papi.Repository
                 return false;
             }
         }
+        public bool HasUser(int userId)
+        {
+            var output = _ctx.Users.Where(user => user.UserId == userId);
+            if (output.Count() > 0)
+                return true;
+            else
+                return false;
+        }
 
-        public bool UpdateUser(int userId,string name, string lastName, DateTime? birthDate, int positionId, DateTime startdate,int subDivisionId, out string error)
+        public bool UpdateUser(int userId,string name, string lastName, DateTime? birthDate, int positionId, DateTime startdate,int subDivisionId, bool enabled, out string error)
         {
             try
             {
@@ -102,6 +121,7 @@ namespace P4Papi.Repository
                     updateUser.PositionId = positionId;
                     updateUser.StartDate = startdate;
                     updateUser.SubdivisionId = subDivisionId;
+                    updateUser.Enabled = enabled;
                     _ctx.SaveChanges();
                     return true;
                 }

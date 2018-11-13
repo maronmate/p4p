@@ -36,8 +36,8 @@
                  <b-col cols="2" class="text-right">
                     <div>เลือกวันที่ DeathLine :</div>
                 </b-col>
-                <b-col cols="2">
-                    <datepicker v-model="selectedDeathLine" name="deathLineDate"></datepicker>
+                <b-col cols="3">
+                    <datepicker v-model="selectedDeathLine" name="deathLineDate" :bootstrap-styling="true" :language="th"></datepicker>
                 </b-col>
               
             </b-row>
@@ -75,6 +75,7 @@
 import { mapGetters } from 'vuex'
 import deathlineList from '@/components/deathLine/deathLineList'
 import Datepicker from 'vuejs-datepicker';
+import {th} from 'vuejs-datepicker/dist/locale'
 
 export default {
     name: 'DeathLine',
@@ -90,6 +91,7 @@ export default {
         selectedMonth:null,
         selectedDeathLine:null,
         IsNew : true,
+        th:th,
         }
     },
     mounted() {

@@ -42,7 +42,9 @@ namespace P4Papi.Controllers
             }
         }
 
-        // GET api/Position/GetPositionByDepartmentId?departmentId=1
+        // GET api/Position/GetPositionByDepartmentId/1
+        [Route("GetPositionByDepartmentId/{departmentId}")]
+        [HttpGet]
         public List<PositionListModel> GetPositionByDepartmentId(int departmentId)
         {
             List<PositionListModel> positionModels = new List<PositionListModel>();

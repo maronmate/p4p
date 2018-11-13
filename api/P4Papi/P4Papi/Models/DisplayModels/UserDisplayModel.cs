@@ -18,12 +18,10 @@ namespace P4Papi.Models
         public string PositionName { get; set; }
         public int SubdivisionId { get; set; }
         public string SubdivisionName { get; set; }
-        public bool IsAdmin { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime StartDate { get; set; }
         public double TargetPoint { get; set; }
+        public bool Enabled { get; set; }
 
         public UserDisplayModel()
         {
@@ -36,7 +34,8 @@ namespace P4Papi.Models
                 Name = user.Name;
                 LastName = user.Lastname;
                 PositionId = user.PositionId;
-                
+                Enabled = user.Enabled;
+
                 if (user.Position != null)
                 {
                     PositionName = user.Position.Name;

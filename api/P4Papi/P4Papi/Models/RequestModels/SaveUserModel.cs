@@ -14,6 +14,7 @@ namespace P4Papi.Models
         public int SubdivisionId { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime StartDate { get; set; }
+        public bool Enabled { get; set; }
 
         public SaveUserModel()
         {
