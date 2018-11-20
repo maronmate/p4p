@@ -44,6 +44,67 @@ export default{
 
         )
         return d.result;
-    }
+    },
+    async GetAllLoginUser(hearderToken)
+    {
+        const url = this.data().apiUrl+'/api/LoginUser';
+        const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken
+                }
+             }
+        return axios.get(url,config);
+        
+    },
+    AddNewLoginUser(username,password,isAdmin,name,departmentIdList,hearderToken)
+    {   
+        const url = this.data().apiUrl +'/api/LoginUser/InsertLoginUser';
+        const config = {
+        headers: {              
+            'Content-Type': 'application/json',
+            'Authorization': hearderToken,
+            }
+         }
+        const requestBody = {
+            Username : username,
+            Password : password,
+            IsAdmin : isAdmin,
+            Name : name,
+            DepartmentIdList : departmentIdList
+        }
+        return axios.post(url,requestBody,config); 
+    },
+    UpdateLoginUser(loginUserId,username,password,isAdmin,name,departmentIdList,hearderToken)
+    {
+        const url = this.data().apiUrl +'/api/LoginUser/'+loginUserId;
+        const config = {
+        headers: {              
+            'Content-Type': 'application/json',
+            'Authorization': hearderToken,
+            }
+         }
+        const requestBody = {
+            LoginId : loginUserId,
+            Username : username,
+            Password : password,
+            IsAdmin : isAdmin,
+            Name : name,
+            DepartmentIdList : departmentIdList,
+        }
+        return axios.put(url,requestBody,config);
+    },
+    DeleteLoginUser(loginUserId,hearderToken)
+    {
+
+        const url = this.data().apiUrl+'/api/LoginUser/'+loginUserId;
+        const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken,
+                }
+             }
+        return axios.delete(url,config);
+    },
 
 }

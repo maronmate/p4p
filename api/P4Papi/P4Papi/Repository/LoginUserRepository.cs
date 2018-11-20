@@ -48,53 +48,141 @@ namespace P4Papi.Repository
 
             return loginModel;
         }
-        //public string EncryptString(string Message)
-        //{
-        //    byte[] Results;
-        //    System.Text.UTF8Encoding UTF8 = new System.Text.UTF8Encoding();
-        //    MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
-        //    byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(_tokenModel.Key));
-        //    TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
-        //    TDESAlgorithm.Key = TDESKey;
-        //    TDESAlgorithm.Mode = CipherMode.ECB;
-        //    TDESAlgorithm.Padding = PaddingMode.PKCS7;
-        //    byte[] DataToEncrypt = UTF8.GetBytes(Message);
-        //    try
-        //    {
-        //        ICryptoTransform Encryptor = TDESAlgorithm.CreateEncryptor();
-        //        Results = Encryptor.TransformFinalBlock(DataToEncrypt, 0, DataToEncrypt.Length);
-        //    }
-        //    finally
-        //    {
-        //        TDESAlgorithm.Clear();
-        //        HashProvider.Clear();
-        //    }
-        //    return Convert.ToBase64String(Results);
-        //}
+       public List<UserLoginDisplayModel> GetUserLoginDataList()
+        {
+            var output = _ctx.LoginUsers.Include(t => t.UserLoginDepartments);
+            List<UserLoginDisplayModel> loginModelList = new List<UserLoginDisplayModel>();
+            foreach (var login in output)
+            {
+                loginModelList.Add(new UserLoginDisplayModel(login));
+            }
+            return loginModelList;
+       }
 
-        //public string DecryptString(string Message)
-        //{
-        //    byte[] Results;
-        //    System.Text.UTF8Encoding UTF8 = new System.Text.UTF8Encoding();
-        //    MD5CryptoServiceProvider HashProvider = new MD5CryptoServiceProvider();
-        //    byte[] TDESKey = HashProvider.ComputeHash(UTF8.GetBytes(_tokenModel.Key));
-        //    TripleDESCryptoServiceProvider TDESAlgorithm = new TripleDESCryptoServiceProvider();
-        //    TDESAlgorithm.Key = TDESKey;
-        //    TDESAlgorithm.Mode = CipherMode.ECB;
-        //    TDESAlgorithm.Padding = PaddingMode.PKCS7;
-        //    byte[] DataToDecrypt = Convert.FromBase64String(Message);
-        //    try
-        //    {
-        //        ICryptoTransform Decryptor = TDESAlgorithm.CreateDecryptor();
-        //        Results = Decryptor.TransformFinalBlock(DataToDecrypt, 0, DataToDecrypt.Length);
-        //    }
-        //    finally
-        //    {
-        //        TDESAlgorithm.Clear();
-        //        HashProvider.Clear();
-        //    }
-        //    return UTF8.GetString(Results);
-        //}
+        public bool InsertLoginUser(string username, string password, bool isAdmin, string name, out string error, out int newLoginId)
+        {
+            try
+            {
+                error = string.Empty;
+                newLoginId = 0;
+                if (HasDuplicateUserName(null, username))
+                {
+                    error = string.Format("username '{0}' นี้มีอยู่ในระบบอยู่แล้ว", username);
+                    return false;
+                }
+                LoginUser newUser = new LoginUser();
+                newUser.Name = name;
+                newUser.Username = username;
+                if (!string.IsNullOrEmpty(password))
+                    newUser.Password = password;
+                newUser.IsAdmin = isAdmin;
+                newUser.Name = name;
+
+                _ctx.LoginUsers.Add(newUser);
+                _ctx.SaveChanges();
+                newLoginId = newUser.LoginId;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                newLoginId = 0;
+                return false;
+            }
+        }
+        public bool UpdateLoginUser(int userLoginId, string username, string password, bool isAdmin, string name, out string error)
+        {
+            try
+            {
+                error = string.Empty;
+                if (HasDuplicateUserName(userLoginId, username))
+                {
+                    error = string.Format("username '{0}' ที่แก้ไขนี้มีอยู่ในระบบอยู่แล้ว", username);
+                    return false;
+                }
+                LoginUser updateUser = GetRealLogin(userLoginId);
+                if (updateUser != null)
+                {
+                    updateUser.Name = name;
+                    updateUser.Username = username;
+                    if(!string.IsNullOrEmpty(password))
+                        updateUser.Password = password;
+                    updateUser.IsAdmin = isAdmin;
+                    updateUser.Name = name;
+                    _ctx.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    error = "No LoginUser data in database";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
+        public bool DeleteLoginUser(int userLoginId, out string error)
+        {
+            try
+            {
+                error = string.Empty;
+                LoginUser removeUser = GetRealLogin(userLoginId);
+                _ctx.LoginUsers.Remove(removeUser);
+                _ctx.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
+        public bool HasDuplicateUserName(int? userLoginId,string username)
+        {
+            bool duplicated = false;
+            
+            var output = _ctx.LoginUsers.Where(user => user.Username == username);
+            //if userLoginId has value, in updateData
+            if (userLoginId.HasValue)
+            {
+                if (output.Count() > 1)
+                {
+                    duplicated = true;
+                }
+                else if (output.Count() == 1)
+                {
+                    LoginUser duplicatedUsername = output.First();
+                    if (duplicatedUsername.LoginId != userLoginId.Value)
+                        duplicated = true;
+                }
+            }
+            else
+            {
+                if (output.Count() > 0)
+                    duplicated = true;
+            }
+            return duplicated;
+        }
+        public bool HasLoginUser(int loginUserId)
+        {
+            var output = _ctx.LoginUsers.Where(user => user.LoginId == loginUserId);
+            if (output.Count() > 0)
+                return true;
+            else
+                return false;
+        }
+
+        private LoginUser GetRealLogin(int loginUserId)
+        {
+            var output = _ctx.LoginUsers.Where(user => user.LoginId == loginUserId);
+            if (output.Count() > 0)
+                return output.FirstOrDefault();
+            else
+                return null;
+        }
         public void Dispose()
         {
             _ctx.Dispose();

@@ -27,7 +27,7 @@ namespace P4Papi
                 Provider = new Provider.ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath =
                 new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(60),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(8),
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };

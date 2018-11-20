@@ -115,7 +115,6 @@ namespace P4Papi.Repository
                 if (updateUser != null)
                 {
                     updateUser.Name = name;
-                    updateUser.Name = name;
                     updateUser.Lastname = lastName;
                     updateUser.Birthdate = birthDate;
                     updateUser.PositionId = positionId;
@@ -127,7 +126,7 @@ namespace P4Papi.Repository
                 }
                 else
                 {
-                    error = "No Department data in database";
+                    error = "No User data in database";
                     return false;
                 }
             }

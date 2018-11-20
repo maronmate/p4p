@@ -8,6 +8,7 @@ import ManageDepartment from '@/views/ManageDepartment'
 import ManagePosition from '@/views/ManagePosition'
 import ManageSubDivision from '@/views/ManageSubDivision'
 import ManageUser from '@/views/ManageUser'
+import ManageLoginUser from '@/views/ManageLoginUser'
 import store from '@/store/index'
 
 Vue.use(Router)
@@ -72,7 +73,13 @@ export default new Router({
       name: 'manageUser',
       component: ManageUser,
       beforeEnter: authMiddleware
-    }
+    },
+    {
+      path:'/admin/manageloginuser',
+      name: 'manageLoginUser',
+      component: ManageLoginUser,
+      beforeEnter: authMiddleware
+    } 
     
   ]
   

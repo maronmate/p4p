@@ -16,6 +16,7 @@
                     <b-dropdown-item href="#"><router-link to="/admin/managedepartment">จัดการแผนก</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/managesubdivision">จัดการหน่วยงาน</router-link></b-dropdown-item>
                     <b-dropdown-item href="#"><router-link to="/admin/manageposition">จัดการตำแหน่ง</router-link></b-dropdown-item>
+                    <b-dropdown-item href="#"><router-link to="/admin/manageloginuser">จัดการผู้ใช้</router-link></b-dropdown-item>
                 </b-nav-item-dropdown>
                 </b-navbar-nav>
 

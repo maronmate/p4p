@@ -142,10 +142,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DeathLineController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
+    <Compile Include="Controllers\LoginUserController.cs" />
     <Compile Include="Controllers\PointController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\SubdivisionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserLoginDepartmentController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -182,12 +184,14 @@
     <Compile Include="Models\DisplayModels\SubdivisionListModel.cs" />
     <Compile Include="Models\DisplayModels\SummaryReportModel.cs" />
     <Compile Include="Models\DisplayModels\UserDisplayModel.cs" />
+    <Compile Include="Models\DisplayModels\UserLoginDisplayModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RequestModels\SaveDeathLineModel.cs" />
     <Compile Include="Models\RequestModels\SaveDepartmentModel.cs" />
     <Compile Include="Models\RequestModels\SavePointRequestModel.cs" />
     <Compile Include="Models\RequestModels\SavePositionModel.cs" />
     <Compile Include="Models\RequestModels\SaveSubdivisionModel.cs" />
+    <Compile Include="Models\RequestModels\SaveUserLoginModel.cs" />
     <Compile Include="Models\RequestModels\SaveUserModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\UserModel.cs" />

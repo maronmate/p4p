@@ -7,6 +7,7 @@ import departmentModule from '@/store/Modules/departmentModule'
 import positionModule from '@/store/Modules/positionModule'
 import subDivisionModule from '@/store/Modules/subDivisionModule'
 import manageUserModule from '@/store/Modules/manageUserModule'
+import loginUserModule from '@/store/Modules/loginUserModule'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     departmentModule,
     positionModule,
     subDivisionModule,
-    manageUserModule
+    manageUserModule,
+    loginUserModule
   }
 })

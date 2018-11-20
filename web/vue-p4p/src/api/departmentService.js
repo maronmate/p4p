@@ -38,6 +38,23 @@ export default{
             })        
             return ddl
     },
+    async GetAllDepartmentCheckBox(hearderToken)
+    {
+        const url = this.data().apiUrl+'/api/Department/GetDepartmentDDL';
+        const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken
+                }
+             }
+            var ddl = [];
+            await axios.get(url,config).then(result =>{
+                result.data.forEach(item => {
+                    ddl.push({value: item.DepartmentId,text: item.DepartmentName})
+                });              
+            })        
+            return ddl
+    },
 
     DeleteDepartment(departmentId,hearderToken)
     {
