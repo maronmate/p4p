@@ -18,7 +18,10 @@ namespace P4Papi.Repository
         public UserDisplayModel GetUserData(int userId)
         {
             UserDisplayModel userModel = null;
-            var output = _ctx.Users.Where(user => user.UserId == userId);
+            var output = _ctx.Users
+                .Include("Position").Include("Position.Department")
+                .Include("Subdivision")
+                .Where(user => user.UserId == userId);
             if (output.Count() > 0)
             {
                 User user = output.First();
@@ -29,7 +32,9 @@ namespace P4Papi.Repository
         }
         public List<User> GetWithFilter(string name,string lastName,int? departmentId,int? positionId,int? subdivisionId)
         {
-            var output = _ctx.Users;
+            var output = _ctx.Users
+            .Include("Position").Include("Position.Department")
+                .Include("Subdivision");
             if (!string.IsNullOrEmpty(name))
             {
                 output.Where(user => user.Name.Contains(name));
@@ -54,7 +59,10 @@ namespace P4Papi.Repository
         }
         public List<UserDisplayModel> GetAllUser()
         {
-            List<User> users = _ctx.Users.OrderBy(a => a.Position.Department.ReportOrder).ThenBy(a => a.Subdivision.OrderInDepartment).ThenBy(a => a.Position.Name).ThenBy(a => a.Name).ToList();
+            List<User> users = _ctx.Users
+                .Include("Position").Include("Position.Department")
+                .Include("Subdivision")
+                .OrderBy(a => a.Position.Department.ReportOrder).ThenBy(a => a.Subdivision.OrderInDepartment).ThenBy(a => a.Position.Name).ThenBy(a => a.Name).ToList();
             List<UserDisplayModel> userModels = new List<UserDisplayModel>();
             foreach (User user in users)
             {

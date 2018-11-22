@@ -26,7 +26,10 @@ namespace P4Papi.Repository
             //if (numberOfRow > 0)
             //     output = _ctx.Points.Where(point => point.UserId == userId).Take(numberOfRow).OrderByDescending(point => point.YM).ToList();
             //else
-            var output = _ctx.Points.Where(point => point.UserId == userId).OrderByDescending(point => point.YM).ToList();
+            var output = _ctx.Points
+                .Include("User").Include("User.Position").Include("User.Position.Department")
+                .Include("User.Subdivision")
+                .Where(point => point.UserId == userId).OrderByDescending(point => point.YM).ToList();
             if (numberOfRow > 0)
                 output = output.Take(numberOfRow).ToList();
 
@@ -39,6 +42,23 @@ namespace P4Papi.Repository
 
             return pointUserList;
         }
+
+        //public List<PointByUserModel> SearchPointForInputPoint(int departmentId, int subdivisionId,int positionId, int userId,DateTime? ymStart,DateTime? ymEnd, Dictionary<string,string> sort, int numberOfRow)
+        //{
+        //    var output = _ctx.Points;
+        //    if (departmentId > 0)
+        //        output.Where(point => point.User.Position.DepartmentId == departmentId);
+        //    if(subdivisionId > 0)
+        //        output.Where(point => point.User.SubdivisionId == subdivisionId);
+        //    if (positionId > 0)
+        //        output.Where(point => point.User.PositionId == positionId);
+        //    if (userId > 0)
+        //        output.Where(point => point.UserId == userId);
+        //    if (ymStart.HasValue)
+        //        output.Where(point => point.YM >= ymStart);
+        //    if (ymEnd.HasValue)
+        //        output.Where(point => point.YM <= ymEnd);
+        //}
 
         public Point GetPointByKeyValues(int userId, DateTime ym)
         {

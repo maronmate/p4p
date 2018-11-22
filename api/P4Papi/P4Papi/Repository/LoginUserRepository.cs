@@ -50,7 +50,7 @@ namespace P4Papi.Repository
         }
        public List<UserLoginDisplayModel> GetUserLoginDataList()
         {
-            var output = _ctx.LoginUsers.Include(t => t.UserLoginDepartments);
+            var output = _ctx.LoginUsers.Include(t => t.UserLoginDepartments).Include("UserLoginDepartments.Department");
             List<UserLoginDisplayModel> loginModelList = new List<UserLoginDisplayModel>();
             foreach (var login in output)
             {

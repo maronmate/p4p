@@ -15,12 +15,18 @@ namespace P4Papi.Repository
         }
         public List<Position> GetAllPositions()
         {
-            List<Position> positions = _ctx.Positions.OrderBy(a => a.Name).ToList();
+            List<Position> positions = _ctx.Positions
+                .Include("Department")
+                .Include("Users")
+                .OrderBy(a => a.Name).ToList();
             return positions;
         }
         public Position GetPositionsById(int positionId)
         {
-            var positions = _ctx.Positions.Where(p => p.PositionId == positionId); ;
+            var positions = _ctx.Positions
+                .Include("Department")
+                .Include("Users")
+                .Where(p => p.PositionId == positionId); ;
             if (positions.Count() > 0)
                 return positions.First();
             else

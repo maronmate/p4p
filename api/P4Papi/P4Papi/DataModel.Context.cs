@@ -18,6 +18,7 @@ namespace P4Papi
         public PfourPEntities()
             : base("name=PfourPEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

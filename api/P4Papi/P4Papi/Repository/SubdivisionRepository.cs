@@ -16,12 +16,18 @@ namespace P4Papi.Repository
         }
         public List<Subdivision> GetAllSubdivision()
         {
-            List<Subdivision> subdivision = _ctx.Subdivisions.OrderBy(a => a.Department.Name).ThenBy(a => a.OrderInDepartment).ToList();
+            List<Subdivision> subdivision = _ctx.Subdivisions
+                .Include("Department")
+                .Include("Users")
+                .OrderBy(a => a.Department.Name).ThenBy(a => a.OrderInDepartment).ToList();
             return subdivision;
         }
         public Subdivision GetSubdivisionById(int subdivisionId)
         {
-            var subdivision = _ctx.Subdivisions.Where(d => d.SubdivisionId == subdivisionId); ;
+            var subdivision = _ctx.Subdivisions
+                .Include("Department")
+                .Include("Users")
+                .Where(d => d.SubdivisionId == subdivisionId); ;
             if (subdivision.Count() > 0)
                 return subdivision.First();
             else

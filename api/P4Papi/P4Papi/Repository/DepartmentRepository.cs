@@ -17,7 +17,10 @@ namespace P4Papi.Repository
 
         public List<Department> GetAllDepartment()
         {
-            List<Department> departments = _ctx.Departments.OrderBy(a => a.ReportOrder).ToList();
+            List<Department> departments = _ctx.Departments
+                .Include("Positions")
+                .Include("Subdivisions")
+                .OrderBy(a => a.ReportOrder).ToList();
             return departments;
         }
         public List<Department> GetAllDepartmentOrderByName()
@@ -27,7 +30,10 @@ namespace P4Papi.Repository
         }
         public Department GetDepartmentByid(int departmentId)
         {
-            var departments = _ctx.Departments.Where(d => d.DepartmentId == departmentId); ;
+            var departments = _ctx.Departments
+                .Include("Positions")
+                .Include("Subdivisions")
+                .Where(d => d.DepartmentId == departmentId); ;
             if (departments.Count() > 0)           
                   return departments.First();
             else
