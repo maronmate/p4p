@@ -9,6 +9,7 @@ import ManagePosition from '@/views/ManagePosition'
 import ManageSubDivision from '@/views/ManageSubDivision'
 import ManageUser from '@/views/ManageUser'
 import ManageLoginUser from '@/views/ManageLoginUser'
+import PointList from '@/views/PointList'
 import store from '@/store/index'
 
 Vue.use(Router)
@@ -23,6 +24,13 @@ const authMiddleware = (to, from, next) => {
     return next('/forbidden');
   } 
   CheckAuthentication();
+}
+const callAuthenticationMiddleware = (to, from, next) => {
+  async function CallAuthenticationStore() {
+    await store.dispatch["loginModule/setAuthenticationStore"];
+    return next()
+  }
+  CallAuthenticationStore();
 }
 
 export default new Router({
@@ -79,8 +87,13 @@ export default new Router({
       name: 'manageLoginUser',
       component: ManageLoginUser,
       beforeEnter: authMiddleware
-    } 
-    
+    }, 
+    {
+      path:'/pointlist',
+      name: 'PointList',
+      component: PointList,
+      beforeEnter:callAuthenticationMiddleware
+    }
   ]
   
 })

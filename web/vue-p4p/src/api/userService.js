@@ -72,5 +72,45 @@ export default{
              }
         return axios.delete(url,config);
     },
+    async GetUserDDLbyFilter(canEmpty,departmentId,subdivisionId,positionId,hearderToken)
+    {
+        
+        if(subdivisionId == null)
+        {
+            subdivisionId = 0;
+        }
+        if(positionId == null)
+        {
+            positionId = 0;
+        }
+        if(departmentId === null)
+        {
+            var ddl = [];
+            ddl.push({value: null,text: '',disabled:false})
+            return ddl
+        }
+        else
+        {
+            const url = this.data().apiUrl+'/api/User/GetUserDDLByFilter/'+departmentId+'/'+subdivisionId+'/'+positionId;
+            const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken
+                }
+             }
+        
+            var ddl = [];
+            if(canEmpty === true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกผู้ใช้',disabled:true})
 
+            await axios.get(url,config).then(result =>{
+                result.data.forEach(item => {
+                    ddl.push({value: item.UserId,text: item.UserFullName})
+                });              
+            })        
+            return ddl
+        }
+    },
 }

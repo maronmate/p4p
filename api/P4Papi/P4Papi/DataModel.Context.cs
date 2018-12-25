@@ -12,13 +12,14 @@ namespace P4Papi
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class PfourPEntities : DbContext
     {
         public PfourPEntities()
             : base("name=PfourPEntities")
         {
-            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -34,5 +35,87 @@ namespace P4Papi
         public virtual DbSet<Subdivision> Subdivisions { get; set; }
         public virtual DbSet<LoginUser> LoginUsers { get; set; }
         public virtual DbSet<UserLoginDepartment> UserLoginDepartments { get; set; }
+    
+        public virtual int P4P_POINT_PROCEDURE(string tYPE, Nullable<int> departmentId, Nullable<int> positionId, Nullable<int> subdivisionId, Nullable<int> userId, string yMStart, string yMEnd, string sortFieldName, Nullable<bool> onDesc)
+        {
+            var tYPEParameter = tYPE != null ?
+                new ObjectParameter("TYPE", tYPE) :
+                new ObjectParameter("TYPE", typeof(string));
+    
+            var departmentIdParameter = departmentId.HasValue ?
+                new ObjectParameter("DepartmentId", departmentId) :
+                new ObjectParameter("DepartmentId", typeof(int));
+    
+            var positionIdParameter = positionId.HasValue ?
+                new ObjectParameter("PositionId", positionId) :
+                new ObjectParameter("PositionId", typeof(int));
+    
+            var subdivisionIdParameter = subdivisionId.HasValue ?
+                new ObjectParameter("SubdivisionId", subdivisionId) :
+                new ObjectParameter("SubdivisionId", typeof(int));
+    
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var yMStartParameter = yMStart != null ?
+                new ObjectParameter("YMStart", yMStart) :
+                new ObjectParameter("YMStart", typeof(string));
+    
+            var yMEndParameter = yMEnd != null ?
+                new ObjectParameter("YMEnd", yMEnd) :
+                new ObjectParameter("YMEnd", typeof(string));
+    
+            var sortFieldNameParameter = sortFieldName != null ?
+                new ObjectParameter("SortFieldName", sortFieldName) :
+                new ObjectParameter("SortFieldName", typeof(string));
+    
+            var onDescParameter = onDesc.HasValue ?
+                new ObjectParameter("OnDesc", onDesc) :
+                new ObjectParameter("OnDesc", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("P4P_POINT_PROCEDURE", tYPEParameter, departmentIdParameter, positionIdParameter, subdivisionIdParameter, userIdParameter, yMStartParameter, yMEndParameter, sortFieldNameParameter, onDescParameter);
+        }
+    
+        public virtual ObjectResult<UserPoint> UserPointProcedure(string tYPE, Nullable<int> departmentId, Nullable<int> positionId, Nullable<int> subdivisionId, Nullable<int> userId, string yMStart, string yMEnd, string sortFieldName, Nullable<bool> onDesc)
+        {
+            var tYPEParameter = tYPE != null ?
+                new ObjectParameter("TYPE", tYPE) :
+                new ObjectParameter("TYPE", typeof(string));
+    
+            var departmentIdParameter = departmentId.HasValue ?
+                new ObjectParameter("DepartmentId", departmentId) :
+                new ObjectParameter("DepartmentId", typeof(int));
+    
+            var positionIdParameter = positionId.HasValue ?
+                new ObjectParameter("PositionId", positionId) :
+                new ObjectParameter("PositionId", typeof(int));
+    
+            var subdivisionIdParameter = subdivisionId.HasValue ?
+                new ObjectParameter("SubdivisionId", subdivisionId) :
+                new ObjectParameter("SubdivisionId", typeof(int));
+    
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var yMStartParameter = yMStart != null ?
+                new ObjectParameter("YMStart", yMStart) :
+                new ObjectParameter("YMStart", typeof(string));
+    
+            var yMEndParameter = yMEnd != null ?
+                new ObjectParameter("YMEnd", yMEnd) :
+                new ObjectParameter("YMEnd", typeof(string));
+    
+            var sortFieldNameParameter = sortFieldName != null ?
+                new ObjectParameter("SortFieldName", sortFieldName) :
+                new ObjectParameter("SortFieldName", typeof(string));
+    
+            var onDescParameter = onDesc.HasValue ?
+                new ObjectParameter("OnDesc", onDesc) :
+                new ObjectParameter("OnDesc", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UserPoint>("UserPointProcedure", tYPEParameter, departmentIdParameter, positionIdParameter, subdivisionIdParameter, userIdParameter, yMStartParameter, yMEndParameter, sortFieldNameParameter, onDescParameter);
+        }
     }
 }

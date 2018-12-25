@@ -70,7 +70,10 @@
                             <b-button variant="success" class="button-ok mb-2 mt-2" v-show="!showEdit" v-on:click="AddPosition">เพิ่มตำแหน่ง</b-button>
                          </b-col>
                     </b-row>
-                    <b-table striped hover :items="positionList" :fields="TableHeader" :filter="filter">     
+                    <b-table striped hover :items="positionList" :fields="TableHeader" :filter="filter">   
+                        <template slot="TargetPoint" slot-scope="data">
+                            {{data.item.TargetPoint|formatNumber}}
+                        </template>  
                         <template slot="action" slot-scope="row">
                             <b-button v-show="!showEdit" variant="success sm" class="button-ok mr-1" size="sm" @click.stop="EditPosition(row.item)">แก้ไข</b-button>
                             <b-button v-show="!showEdit" variant="danger sm" class="button-cancel mr-1" size="sm" @click="ShowCofirmBoxDialog(row.item)" v-b-modal.modalRef >ลบ</b-button>                    
@@ -206,6 +209,7 @@ export default {
         loadPosition()
         {
             this.$store.dispatch('positionModule/loadPositionList')
+            
         },
         ShowCofirmBoxDialog:function(position)
         {         

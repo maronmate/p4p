@@ -20,7 +20,7 @@ export default{
         return axios.get(url,config);
         
     },
-    async GetAllDepartmentDDL(hearderToken)
+    async GetAllDepartmentDDL(canEmpty,hearderToken)
     {
         const url = this.data().apiUrl+'/api/Department/GetDepartmentDDL';
         const config = {
@@ -30,7 +30,31 @@ export default{
                 }
              }
             var ddl = [];
-            ddl.push({value: null,text: 'กรุณาเลือกแผนก',disabled:true})
+            if(canEmpty == true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกแผนก',disabled:true})
+            await axios.get(url,config).then(result =>{
+                result.data.forEach(item => {
+                    ddl.push({value: item.DepartmentId,text: item.DepartmentName})
+                });              
+            })        
+            return ddl
+    },
+    async GetAllDepartmentDDLByLogin(canEmpty,hearderToken,loginId)
+    {
+        const url = this.data().apiUrl+'/api/Department/GetDepartmentDDLByLoginId/'+loginId;
+        const config = {
+            headers: {              
+                'Content-Type': 'application/json',
+                'Authorization': hearderToken
+                }
+             }
+            var ddl = [];
+            if(canEmpty == true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกแผนก',disabled:true})
             await axios.get(url,config).then(result =>{
                 result.data.forEach(item => {
                     ddl.push({value: item.DepartmentId,text: item.DepartmentName})

@@ -20,5 +20,13 @@ namespace P4Papi.Models
             DepartmentId = department.DepartmentId;
             DepartmentName = department.Name;
         }
+        public DepartmentDDLModel(UserLoginDepartment userLoginDepartment)
+        {
+            if (userLoginDepartment != null && userLoginDepartment.Department != null)
+            {
+                DepartmentId = userLoginDepartment.DepartmentId;
+                DepartmentName = userLoginDepartment.Department.Name;
+            }
+        }
     }
 }

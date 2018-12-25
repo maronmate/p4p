@@ -5,7 +5,7 @@
             <b-navbar-brand href="#">P4P</b-navbar-brand>
             <b-collapse is-nav id="nav_collapse">
                 <b-navbar-nav >
-                     <b-nav-item v-if=loginUser href="#"><router-link to="/">ลงคะแนน</router-link> </b-nav-item>
+                     <b-nav-item v-if=loginUser href="#"><router-link to="/pointlist">ลงคะแนน</router-link> </b-nav-item>
                       <b-nav-item v-if=loginUser href="#"><router-link to="/">รวมคะแนน</router-link> </b-nav-item>
                       <b-nav-item-dropdown v-if=isAdmin>
                         <template slot="button-content">

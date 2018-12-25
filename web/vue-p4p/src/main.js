@@ -5,9 +5,16 @@ import store from './store'
 import BootstrapVue from 'bootstrap-vue'
 import NavLayout from '@/layout/layout'
 import * as readConfig  from '@/helper/index.js';
+import numeral from 'numeral';
 
 Vue.use(BootstrapVue)
 Vue.use(require('vue-moment'));
+Vue.use(require('numeral'));
+
+
+  Vue.filter("formatNumber", function (value) {
+    return numeral(value).format("0,0");
+  });
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

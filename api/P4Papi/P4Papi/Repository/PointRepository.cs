@@ -3,6 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PagedList;
+using System.Data.Entity.Core.Objects;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace P4Papi.Repository
 {
@@ -17,15 +22,6 @@ namespace P4Papi.Repository
 
         public List<PointByUserModel> GetPointByUser(int userId, int numberOfRow)
         {
-            //var output = (from point in _ctx.Points
-            //              join user in _ctx.Users on point.UserId equals user.UserId
-            //              join position in _ctx.Positions on user.PositionId equals position.PositionId
-            //              where point.UserId == userId
-            //              select point);
-            //List<Point> output = null;
-            //if (numberOfRow > 0)
-            //     output = _ctx.Points.Where(point => point.UserId == userId).Take(numberOfRow).OrderByDescending(point => point.YM).ToList();
-            //else
             var output = _ctx.Points
                 .Include("User").Include("User.Position").Include("User.Position.Department")
                 .Include("User.Subdivision")
@@ -43,22 +39,207 @@ namespace P4Papi.Repository
             return pointUserList;
         }
 
-        //public List<PointByUserModel> SearchPointForInputPoint(int departmentId, int subdivisionId,int positionId, int userId,DateTime? ymStart,DateTime? ymEnd, Dictionary<string,string> sort, int numberOfRow)
-        //{
-        //    var output = _ctx.Points;
-        //    if (departmentId > 0)
-        //        output.Where(point => point.User.Position.DepartmentId == departmentId);
-        //    if(subdivisionId > 0)
-        //        output.Where(point => point.User.SubdivisionId == subdivisionId);
-        //    if (positionId > 0)
-        //        output.Where(point => point.User.PositionId == positionId);
-        //    if (userId > 0)
-        //        output.Where(point => point.UserId == userId);
-        //    if (ymStart.HasValue)
-        //        output.Where(point => point.YM >= ymStart);
-        //    if (ymEnd.HasValue)
-        //        output.Where(point => point.YM <= ymEnd);
-        //}
+        public int CountSearchPointForInputPoint(PointFilters pointFilters)
+        {
+            var output = _ctx.Points
+                .Include("User").Include("User.Position").Include("User.Position.Department")
+                .Include("User.Subdivision");
+            //filter
+            if (pointFilters != null)
+            {
+                if (pointFilters.DepartmentId.HasValue && pointFilters.DepartmentId > 0)
+                    output.Where(point => point.User.Position.DepartmentId == pointFilters.DepartmentId);
+                if (pointFilters.SubdivisionId.HasValue && pointFilters.SubdivisionId > 0)
+                    output.Where(point => point.User.SubdivisionId == pointFilters.SubdivisionId);
+                if (pointFilters.PositionId.HasValue && pointFilters.PositionId > 0)
+                    output.Where(point => point.User.PositionId == pointFilters.PositionId);
+                if (pointFilters.UserId.HasValue && pointFilters.UserId > 0)
+                    output.Where(point => point.UserId == pointFilters.UserId);
+                if (pointFilters.YMStart.HasValue)
+                    output.Where(point => point.YM >= pointFilters.YMStart);
+                if (pointFilters.YMEnd.HasValue)
+                    output.Where(point => point.YM <= pointFilters.YMEnd);
+            }
+            return output.Count();
+        }
+        public List<PointByUserModel> SearchPointForInputPoint(PointFilters pointFilters, Sorter sorter, PagingTable pagingTable)
+        {
+            var output = _ctx.Points
+                .Include("User").Include("User.Position").Include("User.Position.Department")
+                .Include("User.Subdivision");
+
+            //filter
+            if (pointFilters != null)
+            {
+                if (pointFilters.DepartmentId.HasValue && pointFilters.DepartmentId > 0)
+                    output.Where(point => point.User.Position.DepartmentId == pointFilters.DepartmentId);
+                if (pointFilters.SubdivisionId.HasValue && pointFilters.SubdivisionId > 0)
+                    output.Where(point => point.User.SubdivisionId == pointFilters.SubdivisionId);
+                if (pointFilters.PositionId.HasValue && pointFilters.PositionId > 0)
+                    output.Where(point => point.User.PositionId == pointFilters.PositionId);
+                if (pointFilters.UserId.HasValue && pointFilters.UserId > 0)
+                    output.Where(point => point.UserId == pointFilters.UserId);
+                if (pointFilters.YMStart.HasValue)
+                    output.Where(point => point.YM >= pointFilters.YMStart);
+                if (pointFilters.YMEnd.HasValue)
+                    output.Where(point => point.YM <= pointFilters.YMEnd);
+            }
+
+            //sorter
+            if (sorter != null)
+            {
+                if(!string.IsNullOrEmpty(sorter.FieldName))
+                {
+                    Type pointModelType = typeof(PointByUserModel);
+                    var property = pointModelType.GetProperty(sorter.FieldName);
+                    if(property != null)
+                    {
+                        string pointModelPropertyName = property.Name;
+                        if (pointModelPropertyName == "YM")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.YM);
+                            else
+                                output.OrderBy(p => p.YM);
+                        }
+                        else if (pointModelPropertyName == "UserId")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.UserId);
+                            else
+                                output.OrderBy(p => p.UserId);
+                        }
+                        else if (pointModelPropertyName == "Name")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.User.Name);
+                            else
+                                output.OrderBy(p => p.User.Name);
+                        }
+                        else if (pointModelPropertyName == "Lastname")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.User.Lastname);
+                            else
+                                output.OrderBy(p => p.User.Lastname);
+                        }
+                        else if (pointModelPropertyName == "PositionName")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.User.Position.Name);
+                            else
+                                output.OrderBy(p => p.User.Position.Name);
+                        }
+                        else if (pointModelPropertyName == "DepartmentName")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.User.Position.Department.Name);
+                            else
+                                output.OrderBy(p => p.User.Position.Department.Name);
+                        }
+                        else if (pointModelPropertyName == "SubdivisionName")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.User.Subdivision.Name);
+                            else
+                                output.OrderBy(p => p.User.Subdivision.Name);
+                        }
+                        else if (pointModelPropertyName == "Point")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.MonthlyPoint);
+                            else
+                                output.OrderBy(p => p.MonthlyPoint);
+                        }
+                        else if (pointModelPropertyName == "Remark")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.Remark);
+                            else
+                                output.OrderBy(p => p.Remark);
+                        }
+                        else if (pointModelPropertyName == "TargetPoint")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.User.Position.TargetPoint);
+                            else
+                                output.OrderBy(p => p.User.Position.TargetPoint);
+                        }
+                        else if (pointModelPropertyName == "ModifyDate")
+                        {
+                            if (sorter.OnDesc)
+                                output.OrderByDescending(p => p.ModifyDate);
+                            else
+                                output.OrderBy(p => p.ModifyDate);
+                        }
+                    }                  
+                }
+            }
+
+            //paging
+            if(pagingTable != null)
+            {
+                if (pagingTable.CurrentPage < 1)
+                    pagingTable.CurrentPage = 1;
+                if (pagingTable.PageSize > 0)
+                    output.ToPagedList(pagingTable.CurrentPage, pagingTable.PageSize);
+            }
+
+            List<Point> rawPoint = output.ToList();
+            List<PointByUserModel> points = new List<PointByUserModel>();
+            foreach (Point point in rawPoint)
+            {
+                PointByUserModel pm = new PointByUserModel(point);
+                points.Add(pm);
+            }
+            return points;
+        }
+
+        public ObjectResult<UserPoint> GetUserPointA(PointFilters pointFilters, Sorter sorter)
+        {
+            string procedureType = "REQUEST_POINT_LIST";
+            string ymStart = "";
+            string ymEnd = "";
+
+            if (pointFilters != null)
+            {
+                if (pointFilters.YMStart.HasValue)
+                    ymStart = pointFilters.YMStart.Value.ToString("yyyy-MM-dd");
+                if (pointFilters.YMEnd.HasValue)
+                    ymEnd = pointFilters.YMEnd.Value.ToString("yyyy-MM-dd");
+                if (sorter == null)
+                    sorter = new Sorter();
+
+                ObjectResult<UserPoint> output = _ctx.UserPointProcedure(procedureType, pointFilters.DepartmentId, pointFilters.PositionId, pointFilters.SubdivisionId, pointFilters.UserId, ymStart, ymEnd, sorter.FieldName, sorter.OnDesc);
+                return output;
+            }
+            return null;
+        }
+
+        public DataTable GetUserPoint(PointFilters pointFilters, Sorter sorter)
+        {
+            string ymStart = "";
+            string ymEnd = "";
+
+            if (pointFilters != null)
+            {
+                if (pointFilters.YMStart.HasValue)
+                    ymStart = pointFilters.YMStart.Value.ToString("yyyy-MM-dd");
+                if (pointFilters.YMEnd.HasValue)
+                    ymEnd = pointFilters.YMEnd.Value.ToString("yyyy-MM-dd");
+                if (sorter == null)
+                    sorter = new Sorter();
+
+                DataSet ds = new StoredProcedures.GetDataStoredProcedures().GetDataUserPoint(pointFilters.DepartmentId, pointFilters.PositionId, pointFilters.SubdivisionId, pointFilters.UserId, ymStart, ymEnd);
+                if(ds != null && ds.Tables.Count >0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    
+                    return dt;
+                }
+            }
+            return null;
+        }
 
         public Point GetPointByKeyValues(int userId, DateTime ym)
         {

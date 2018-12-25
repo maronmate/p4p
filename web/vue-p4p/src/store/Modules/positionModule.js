@@ -45,7 +45,7 @@ const actions = {
     },
     async loadDDLDepartment({ state, commit,rootGetters }) {
         let hearderToken = rootGetters["loginModule/header"]
-        let departments = await departmentService.GetAllDepartmentDDL(hearderToken);
+        let departments = await departmentService.GetAllDepartmentDDL(false,hearderToken);
         commit(type.loadDdlDepartment,departments)
         },
     async loadPositionList({ state, commit,rootGetters }) {

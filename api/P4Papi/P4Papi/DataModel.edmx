@@ -167,6 +167,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="P4P_POINT_PROCEDURE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TYPE" Type="nvarchar" Mode="In" />
+          <Parameter Name="DepartmentId" Type="int" Mode="In" />
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="SubdivisionId" Type="int" Mode="In" />
+          <Parameter Name="UserId" Type="int" Mode="In" />
+          <Parameter Name="YMStart" Type="nvarchar" Mode="In" />
+          <Parameter Name="YMEnd" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortFieldName" Type="nvarchar" Mode="In" />
+          <Parameter Name="OnDesc" Type="bit" Mode="In" />
+        </Function>
         <EntityContainer Name="PfourPModelStoreContainer">
           <EntitySet Name="DeathLine" EntityType="Self.DeathLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
@@ -309,6 +320,28 @@
             <End Role="LoginUser" EntitySet="LoginUsers" />
             <End Role="UserLoginDepartment" EntitySet="UserLoginDepartments" />
           </AssociationSet>
+          <FunctionImport Name="P4P_POINT_PROCEDURE">
+            <Parameter Name="TYPE" Mode="In" Type="String" />
+            <Parameter Name="DepartmentId" Mode="In" Type="Int32" />
+            <Parameter Name="PositionId" Mode="In" Type="Int32" />
+            <Parameter Name="SubdivisionId" Mode="In" Type="Int32" />
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+            <Parameter Name="YMStart" Mode="In" Type="String" />
+            <Parameter Name="YMEnd" Mode="In" Type="String" />
+            <Parameter Name="SortFieldName" Mode="In" Type="String" />
+            <Parameter Name="OnDesc" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="UserPointProcedure" ReturnType="Collection(PfourPModel.UserPoint)">
+            <Parameter Name="TYPE" Mode="In" Type="String" />
+            <Parameter Name="DepartmentId" Mode="In" Type="Int32" />
+            <Parameter Name="PositionId" Mode="In" Type="Int32" />
+            <Parameter Name="SubdivisionId" Mode="In" Type="Int32" />
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+            <Parameter Name="YMStart" Mode="In" Type="String" />
+            <Parameter Name="YMEnd" Mode="In" Type="String" />
+            <Parameter Name="SortFieldName" Mode="In" Type="String" />
+            <Parameter Name="OnDesc" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="DeathLine">
           <Key>
@@ -423,6 +456,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="UserPoint" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -514,6 +548,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="P4P_POINT_PROCEDURE" FunctionName="PfourPModel.Store.P4P_POINT_PROCEDURE" />
+          <FunctionImportMapping FunctionImportName="UserPointProcedure" FunctionName="PfourPModel.Store.P4P_POINT_PROCEDURE">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PfourPModel.UserPoint" />
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

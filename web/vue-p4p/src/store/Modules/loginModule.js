@@ -33,13 +33,22 @@ const getters = {
         return state.resultMsg;
     },
     loginId(state, getters) {
-        return state.loginUser.Id;
+        if(state.loginUser)
+            return state.loginUser.Id;
+        else
+            return null;
     },
     loginName(state, getters) {
-        return state.loginUser.Name;
+        if(state.loginUser)
+            return state.loginUser.Name;
+        else
+            return null;
     },
     allDepartment(state, getters) {
-        return state.loginUser.DepartmentList.split(",");
+        if(state.loginUser)
+            return state.loginUser.DepartmentList.split(",");
+        else
+            return null;
     },
     canAccessDepartment: (state, getters) => (departmentId) => {
         let result = false;

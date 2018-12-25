@@ -65,12 +65,15 @@ export default{
              }
         return axios.delete(url,config);
     },
-    async GetPositionDDLbyDepartment(departmentId,hearderToken)
+    async GetPositionDDLbyDepartment(canEmpty,departmentId,hearderToken)
     {
         if(departmentId == null)
         {
             var ddl = [];
-            ddl.push({value: null,text: 'กรุณาเลือกตำแหน่ง',disabled:true})
+            if(canEmpty == true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกตำแหน่ง',disabled:true})
             return ddl;
         }
         const url = this.data().apiUrl+'/api/Position/GetPositionByDepartmentId/'+departmentId;
@@ -81,7 +84,10 @@ export default{
                 }
              }
             var ddl = [];
-            ddl.push({value: null,text: 'กรุณาเลือกตำแหน่ง',disabled:true})
+            if(canEmpty == true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกตำแหน่ง',disabled:true})
             await axios.get(url,config).then(result =>{
                 result.data.forEach(item => {
                     ddl.push({value: item.PositionId,text: item.PositionName})

@@ -1,4 +1,5 @@
 {
     "apiHostUrl":"http://localhost:21823",
-    "localStorageKey":"bouykem"
+    "localStorageKey":"bouykem",
+    "pagingSize":"10"
 }

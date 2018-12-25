@@ -8,6 +8,7 @@ import positionModule from '@/store/Modules/positionModule'
 import subDivisionModule from '@/store/Modules/subDivisionModule'
 import manageUserModule from '@/store/Modules/manageUserModule'
 import loginUserModule from '@/store/Modules/loginUserModule'
+import pointListModule from '@/store/Modules/pointListModule'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     positionModule,
     subDivisionModule,
     manageUserModule,
-    loginUserModule
+    loginUserModule,
+    pointListModule
   }
 })

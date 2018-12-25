@@ -43,7 +43,7 @@ namespace P4Papi.Controllers
             }
         }
 
-        // GET api/Subdivision/GetSubdivisionByDepartmentId?departmentId=1
+        // GET api/Subdivision/GetSubdivisionByDepartmentId/1
         [Route("GetSubdivisionByDepartmentId/{departmentId}")]
         [HttpGet]
         public List<SubdivisionListModel> GetSubdivisionByDepartmentId(int departmentId)

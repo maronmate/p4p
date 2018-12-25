@@ -60,6 +60,20 @@ namespace P4Papi.Controllers
             }
             return departmentModels;
         }
+        // GET api/Department/GetDepartmentDDLByLoginId/1
+        [HttpGet]
+        [Route("GetDepartmentDDLByLoginId/{loginId}")]
+        public List<DepartmentDDLModel> GetDepartmentDDLByLoginId(int loginId)
+        {
+            List<DepartmentDDLModel> departmentModels = new List<DepartmentDDLModel>();
+            List<UserLoginDepartment> userLoginDepartment = RepositoryFactory.UserLoginDepartmentRepository.GetUserLoginDepartmentForDdl(loginId);
+            foreach (UserLoginDepartment uld in userLoginDepartment)
+            {
+                DepartmentDDLModel departmentDDLModel = new DepartmentDDLModel(uld);
+                departmentModels.Add(departmentDDLModel);
+            }
+            return departmentModels;
+        }
 
 
         // POST api/Department/InsertDepartment

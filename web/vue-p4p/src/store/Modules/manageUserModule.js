@@ -3,7 +3,7 @@ import departmentService from '@/api/departmentService'
 import positionService from '@/api/positionService'
 import userService from '@/api/userService'
 const type = {
-    loadUserList:'LOAD_SUB_DIVISION',
+    loadUserList:'LOAD_USER_LIST',
     loadDdlDepartment:'LOAD_DDL_DEPARTMENT',
     onLoadAPI:'ON_LOAD_API',
     loadDdlPosition:'LOAD_DDL_POSITION',
@@ -85,17 +85,17 @@ const actions = {
 
     async loadDDLDepartment({ state, commit,rootGetters }) {
         let hearderToken = rootGetters["loginModule/header"]
-        let departments = await departmentService.GetAllDepartmentDDL(hearderToken);
+        let departments = await departmentService.GetAllDepartmentDDL(false,hearderToken);
         commit(type.loadDdlDepartment,departments)
     },
     async loadDDLPosition({ state, commit,rootGetters },departmentId) {
         let hearderToken = rootGetters["loginModule/header"]
-        let positions = await positionService.GetPositionDDLbyDepartment(departmentId,hearderToken);
+        let positions = await positionService.GetPositionDDLbyDepartment(false,departmentId,hearderToken);
         commit(type.loadDdlPosition,positions)
     },
     async loadDDLSubdivision({ state, commit,rootGetters },departmentId) {
         let hearderToken = rootGetters["loginModule/header"]
-        let subdivisions = await subDivisionService.GetSubdivisionDDLbyDepartment(departmentId,hearderToken);
+        let subdivisions = await subDivisionService.GetSubdivisionDDLbyDepartment(false,departmentId,hearderToken);
         commit(type.loadDdlSubDivision,subdivisions)
     },
     async clcDDL({ state, commit,rootGetters }) {

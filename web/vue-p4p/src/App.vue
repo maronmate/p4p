@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+
 export default {
   data: () => ({
     currentTemplate: "nav-layout",
@@ -90,4 +91,9 @@ html
 #nav a.router-link-exact-active {
   color: #4e4e4ebd;
 }
+ .column-ym
+    {
+        width: 10px;
+        max-width: 10px;
+    }
 </style>

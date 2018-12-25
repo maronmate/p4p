@@ -17,3 +17,7 @@ export function getKeyLocal()
 {
     return getConfigValue('localStorageKey');
 }
+export function getPageSize()
+{
+    return getConfigValue('pagingSize');
+}

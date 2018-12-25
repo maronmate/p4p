@@ -30,6 +30,13 @@ namespace P4Papi.Repository
             var output = _ctx.UserLoginDepartments.Where(ULD => ULD.UserLoginId == userLoginId).OrderBy(a => a.DepartmentId).ToList();
             return output;
         }
+        public List<UserLoginDepartment> GetUserLoginDepartmentForDdl(int userLoginId)
+        {
+            var output = _ctx.UserLoginDepartments
+                .Include("Department")
+                .Where(ULD => ULD.UserLoginId == userLoginId).OrderBy(a => a.Department.Name).ToList();
+            return output;
+        }
         public List<UserLoginDepartment> GetUserLoginDepartmentByDepartment(int departmentId)
         {
             var output = _ctx.UserLoginDepartments.Where(ULD => ULD.DepartmentId == departmentId).OrderBy(a => a.UserLoginId).ToList();

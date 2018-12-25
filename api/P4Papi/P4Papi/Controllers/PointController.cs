@@ -2,6 +2,8 @@
 using P4Papi.Repository;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -20,6 +22,41 @@ namespace P4Papi.Controllers
         {
             List<PointByUserModel> result = RepositoryFactory.PointRepository.GetPointByUser(userId, numberOfRow);
             return result;
+        }
+
+        // POST api/Point/SearchPointCount
+        [HttpPost]
+        [Route("SearchPointCount")]
+        public int SearchPointCount([FromBody] SearchPointRequestModel searchPointRequest)
+        {
+            PointFilters pointFilters = new PointFilters(searchPointRequest.DepartmentId, searchPointRequest.SubdivisionId, searchPointRequest.PositionId, searchPointRequest.UserId, searchPointRequest.YMStart, searchPointRequest.YMEnd);
+            int count = RepositoryFactory.PointRepository.CountSearchPointForInputPoint(pointFilters);
+            return count;
+        }
+
+        // POST api/Point/SearchPoints
+        [HttpPost]
+        [Route("SearchPoints")]
+        public List<PointByUserModel> SearchPoints([FromBody] SearchPointRequestModel searchPointRequest)
+        {
+            PointFilters pointFilters = new PointFilters(searchPointRequest.DepartmentId, searchPointRequest.SubdivisionId, searchPointRequest.PositionId, searchPointRequest.UserId, searchPointRequest.YMStart, searchPointRequest.YMEnd);
+            Sorter sorter = new Sorter(searchPointRequest.SortFieldName, searchPointRequest.SortOnDesc);
+            PagingTable paging = new PagingTable(searchPointRequest.PageSize, searchPointRequest.CurrentPage);
+
+            List<PointByUserModel> points = RepositoryFactory.PointRepository.SearchPointForInputPoint(pointFilters, sorter, paging);
+            return points;
+        }
+
+        // POST api/Point/SearchUserPoints
+        [HttpPost]
+        [Route("SearchUserPoints")]
+        public DataTable SearchUserPoints([FromBody] SearchPointRequestModel searchPointRequest)
+        {
+            PointFilters pointFilters = new PointFilters(searchPointRequest.DepartmentId, searchPointRequest.SubdivisionId, searchPointRequest.PositionId, searchPointRequest.UserId, searchPointRequest.YMStart, searchPointRequest.YMEnd);
+            Sorter sorter = new Sorter(searchPointRequest.SortFieldName, searchPointRequest.SortOnDesc);
+
+            DataTable dt = RepositoryFactory.PointRepository.GetUserPoint(pointFilters, sorter);
+            return dt;
         }
 
         // POST api/Point/InsertPoint

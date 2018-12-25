@@ -64,11 +64,16 @@ export default{
              }
         return axios.delete(url,config);
     },
-    async GetSubdivisionDDLbyDepartment(departmentId,hearderToken)
+    async GetSubdivisionDDLbyDepartment(canEmpty,departmentId,hearderToken)
     {
         if(departmentId == null)
         {
-            return [];
+            var ddl = [];
+            if(canEmpty == true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกหน่วยงาน',disabled:true})
+            return ddl;
         }
         const url = this.data().apiUrl+'/api/Subdivision/GetSubdivisionByDepartmentId/'+departmentId;
         const config = {
@@ -78,7 +83,10 @@ export default{
                 }
              }
             var ddl = [];
-            ddl.push({value: null,text: 'กรุณาเลือกหน่วยงาน',disabled:true})
+            if(canEmpty == true)
+                ddl.push({value: null,text: '',disabled:false})
+            else
+                ddl.push({value: null,text: 'กรุณาเลือกหน่วยงาน',disabled:true})
             await axios.get(url,config).then(result =>{
                 result.data.forEach(item => {
                     ddl.push({value: item.SubdivisionId,text: item.SubdivisionName})

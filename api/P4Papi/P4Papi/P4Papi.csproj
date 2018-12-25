@@ -77,6 +77,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -183,9 +186,11 @@
     <Compile Include="Models\DisplayModels\PositionListModel.cs" />
     <Compile Include="Models\DisplayModels\SubdivisionListModel.cs" />
     <Compile Include="Models\DisplayModels\SummaryReportModel.cs" />
+    <Compile Include="Models\DisplayModels\UserDDLModel.cs" />
     <Compile Include="Models\DisplayModels\UserDisplayModel.cs" />
     <Compile Include="Models\DisplayModels\UserLoginDisplayModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\RequestModels\GetUserDDLModel.cs" />
     <Compile Include="Models\RequestModels\SaveDeathLineModel.cs" />
     <Compile Include="Models\RequestModels\SaveDepartmentModel.cs" />
     <Compile Include="Models\RequestModels\SavePointRequestModel.cs" />
@@ -193,6 +198,7 @@
     <Compile Include="Models\RequestModels\SaveSubdivisionModel.cs" />
     <Compile Include="Models\RequestModels\SaveUserLoginModel.cs" />
     <Compile Include="Models\RequestModels\SaveUserModel.cs" />
+    <Compile Include="Models\RequestModels\SearchPointRequestModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Point.cs">
@@ -209,6 +215,10 @@
     <Compile Include="Repository\PositionRepository.cs" />
     <Compile Include="Repository\Factory\RepositoryFactory.cs" />
     <Compile Include="Repository\PointRepository.cs" />
+    <Compile Include="Repository\RepositoryClass\PagingTable.cs" />
+    <Compile Include="Repository\RepositoryClass\PointFilters.cs" />
+    <Compile Include="Repository\RepositoryClass\Sorter.cs" />
+    <Compile Include="Repository\StoredProcedures\GetDataStoredProcedures.cs" />
     <Compile Include="Repository\SubdivisionRepository.cs" />
     <Compile Include="Repository\UserLoginDepartmentRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
@@ -220,6 +230,9 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserLoginDepartment.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserPoint.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

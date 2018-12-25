@@ -30,32 +30,43 @@ namespace P4Papi.Repository
 
             return userModel;
         }
-        public List<User> GetWithFilter(string name,string lastName,int? departmentId,int? positionId,int? subdivisionId)
+        public List<User> GetWithFilter(int? departmentId,int? positionId,int? subdivisionId)
         {
-            var output = _ctx.Users
-            .Include("Position").Include("Position.Department")
-                .Include("Subdivision");
-            if (!string.IsNullOrEmpty(name))
+         //   var output = _ctx.Users
+         //       .Include("Position").Include("Position.Department")
+         //       .Include("Subdivision");
+
+
+            string sql = "select * from [User] " +
+                " Inner join Position on [User].PositionId = Position.PositionId" +
+                " Inner join Department on Position.DepartmentId = Department.DepartmentId" +
+                " Inner join Subdivision on [User].SubdivisionId = Subdivision.SubdivisionId";
+
+            if (departmentId.HasValue || positionId.HasValue || subdivisionId.HasValue)
+                sql = sql + " Where";
+
+            if (departmentId.HasValue)
             {
-                output.Where(user => user.Name.Contains(name));
-            }
-            if (!string.IsNullOrEmpty(lastName))
-            {
-                output.Where(user => user.Lastname.Contains(lastName));
-            }
-            if(departmentId.HasValue)
-            {
-                output.Where(user => user.Position.DepartmentId == departmentId);
+                sql = sql + string.Format(" Position.DepartmentId = {0}", departmentId.Value);
+               // output.Where(user => user.Position.DepartmentId == departmentId);
             }
             if (positionId.HasValue)
             {
-                output.Where(user => user.PositionId == positionId);
+                if (departmentId.HasValue)
+                    sql = sql + " And";
+                sql = sql + string.Format(" [User].PositionId = {0}", positionId.Value);
+                //output.Where(user => user.PositionId == positionId);
             }
             if (subdivisionId.HasValue)
             {
-                output.Where(user => user.SubdivisionId == subdivisionId);
+                if (departmentId.HasValue || positionId.HasValue)
+                    sql = sql + " And";
+                sql = sql + string.Format(" [User].SubdivisionId = {0}", subdivisionId.Value); 
+                //output.Where(user => user.SubdivisionId == subdivisionId);
             }
-            return output.ToList();
+            var Users = _ctx.Users.SqlQuery(sql).ToList();
+            return Users;
+           // return output.OrderBy(user => user.Name).ToList();
         }
         public List<UserDisplayModel> GetAllUser()
         {

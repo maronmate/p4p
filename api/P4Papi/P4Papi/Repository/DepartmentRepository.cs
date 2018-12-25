@@ -28,6 +28,7 @@ namespace P4Papi.Repository
             List<Department> departments = _ctx.Departments.OrderBy(a => a.Name).ToList();
             return departments;
         }
+       
         public Department GetDepartmentByid(int departmentId)
         {
             var departments = _ctx.Departments

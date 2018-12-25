@@ -27,6 +27,31 @@ namespace P4Papi.Controllers
             UserDisplayModel resultUser = RepositoryFactory.UserRepository.GetUserData(id);
             return resultUser;
         }
+        // GET api/User/GetUserDDLByFilter/1/0/0
+        [HttpGet]
+        [Route("GetUserDDLByFilter/{departmentId}/{subdivisionId}/{positionId}")]
+        public List<UserDDLModel> GetUserDDLByFilter(int departmentId, int subdivisionId, int positionId)
+        {
+            List<UserDDLModel> userDDLModels = new List<UserDDLModel>();
+            int? parmDepartmentId = null;
+            int? parmSubdivisionId = null;
+            int? parmPositionId = null;
+
+            if (departmentId > 0)
+                parmDepartmentId = departmentId;
+            if (subdivisionId > 0)
+                parmSubdivisionId = subdivisionId;
+            if (positionId > 0)
+                parmPositionId = positionId;
+
+            List<User> users = RepositoryFactory.UserRepository.GetWithFilter(parmDepartmentId, parmPositionId, parmSubdivisionId);
+            foreach (User user in users)
+            {
+                UserDDLModel userDDLModel = new UserDDLModel(user);
+                userDDLModels.Add(userDDLModel);
+            }
+            return userDDLModels;
+        }
         // POST api/User/InsertUser
         [HttpPost]
         [Route("InsertUser")]
